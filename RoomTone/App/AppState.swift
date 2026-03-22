@@ -6,6 +6,16 @@ final class AppState {
     var audioTimbre: AudioTimbre = .drone
     var isAudioPlaying: Bool = false
     var isLiDARAvailable: Bool = false
+
+    var isScanning: Bool {
+        if case .scanning = scanPhase { return true }
+        return false
+    }
+
+    var isConfirmed: Bool {
+        if case .confirmed = scanPhase { return true }
+        return false
+    }
 }
 
 enum ScanPhase: Equatable {
