@@ -9,12 +9,29 @@ final class RoomModel {
     var scanProgress: Float = 0.0
     var isEnclosureConfirmed: Bool = false
     var octaveShiftActive: Bool = false
+    var lfoPhase: Float = 0.0
+    var dominantModeIndex: Int?
 
-    /// Primary output consumed by OscillatorBank on every audio frame.
-    /// Returns amplitude multiplier [0.0–1.0] for each mode in self.modes.
+    /// Primary output consumed by OscillatorBank.
+    /// Returns amplitude multiplier for each mode based on player position.
     func modeAmplitudes() -> [Float] {
-        // Stub for Phase 0 — real implementation in Phase 1
-        Array(repeating: 0.0, count: modes.count)
+        guard let dims = dimensions else {
+            return Array(repeating: 0.0, count: modes.count)
+        }
+        return ModeAmplitudeController.calculateAmplitudes(
+            playerPosition: playerPosition,
+            dimensions: dims,
+            modes: modes,
+            lfoPhase: lfoPhase
+        )
+    }
+
+    /// Advance the amplitude LFO by the given time delta (0.1Hz cycle).
+    func advanceLFO(deltaTime: Float) {
+        lfoPhase += 2.0 * Float.pi * 0.1 * deltaTime
+        if lfoPhase >= 2.0 * Float.pi {
+            lfoPhase -= 2.0 * Float.pi
+        }
     }
 
     /// Called by ARSessionManager on every ARFrame (main thread).
@@ -26,8 +43,11 @@ final class RoomModel {
         )
     }
 
-    /// Called by RoomGeometryProcessor when new plane anchors confirmed.
+    /// Called by RoomGeometryProcessor when new plane anchors confirmed,
+    /// or directly with hardcoded dimensions in Phase 1.
     func updateDimensions(_ newDimensions: RoomDimensions) {
         dimensions = newDimensions
+        modes = RoomModeCalculator.calculateModes(for: newDimensions)
+        octaveShiftActive = newDimensions.requiresOctaveShift
     }
 }

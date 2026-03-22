@@ -15,6 +15,14 @@ enum ModeAxis: Equatable, Sendable {
     case axial      // energy in one dimension only (n,0,0 or 0,m,0 or 0,0,l)
     case tangential // energy in two dimensions
     case oblique    // energy in all three dimensions
+
+    var displayLabel: String {
+        switch self {
+        case .axial: "Axial"
+        case .tangential: "Tangential"
+        case .oblique: "Oblique"
+        }
+    }
 }
 
 enum WallAxis: Equatable, Sendable {

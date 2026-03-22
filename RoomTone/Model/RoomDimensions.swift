@@ -16,4 +16,7 @@ struct RoomDimensions: Equatable, Sendable {
         let surfaceArea = 2.0 * (Lx * Ly + Lx * Lz + Ly * Lz)
         return (0.161 * volume) / (0.15 * surfaceArea)
     }
+
+    /// Phase 1 hardcoded test room (4m × 3m × 2.5m)
+    static let testRoom = RoomDimensions(Lx: 4.0, Ly: 3.0, Lz: 2.5)
 }

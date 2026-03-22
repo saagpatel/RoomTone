@@ -5,7 +5,9 @@ import os
 final class RoomAudioEngine {
     private let engine = AVAudioEngine()
     private let mixer = AVAudioMixerNode()
-    private var sourceNode: AVAudioSourceNode?
+    private var oscillatorBank: OscillatorBank?
+    private var timbreProcessor: TimbreProcessor?
+    private(set) var recorder: AudioRecorder?
 
     private let logger = Logger(subsystem: "com.roomtone.app", category: "AudioEngine")
 
@@ -13,8 +15,9 @@ final class RoomAudioEngine {
 
     init() {
         configureAudioSession()
-        setupGraph()
     }
+
+    // MARK: - Lifecycle
 
     func start() {
         guard !engine.isRunning else { return }
@@ -32,6 +35,114 @@ final class RoomAudioEngine {
         logger.info("Audio engine stopped")
     }
 
+    // MARK: - Configuration
+
+    /// Build the full audio graph and configure for the given room.
+    /// Call once after room dimensions are known.
+    func configure(dimensions: RoomDimensions, modes: [RoomMode]) {
+        let outputFormat = engine.outputNode.inputFormat(forBus: 0)
+
+        // Create components
+        let bank = OscillatorBank(format: outputFormat)
+        let timbre = TimbreProcessor()
+        let rec = AudioRecorder(engine: engine)
+
+        // Attach nodes
+        engine.attach(mixer)
+        engine.attach(timbre.timePitchNode)
+        engine.attach(timbre.reverbNode)
+
+        for node in bank.sourceNodes {
+            engine.attach(node)
+            engine.connect(node, to: mixer, format: outputFormat)
+        }
+
+        // Wire graph: mixer → timePitch → reverb → output
+        engine.connect(mixer, to: timbre.timePitchNode, format: outputFormat)
+        engine.connect(timbre.timePitchNode, to: timbre.reverbNode, format: outputFormat)
+        engine.connect(timbre.reverbNode, to: engine.outputNode, format: outputFormat)
+
+        engine.prepare()
+
+        // Configure
+        bank.configure(modes: modes)
+        timbre.configure(oscillatorBank: bank, mixer: mixer)
+        timbre.configureReverb(rt60: dimensions.estimatedRT60)
+
+        // Store references
+        oscillatorBank = bank
+        timbreProcessor = timbre
+        recorder = rec
+
+        logger.info("Audio graph configured: \(modes.count) modes, RT60=\(dimensions.estimatedRT60)s")
+    }
+
+    // MARK: - Controls
+
+    /// Update per-oscillator amplitudes from RoomModel calculation.
+    func updateAmplitudes(_ amplitudes: [Float]) {
+        oscillatorBank?.setAmplitudes(amplitudes)
+    }
+
+    /// Switch between Drone and Ambient timbre.
+    func setTimbre(_ timbre: AudioTimbre) {
+        timbreProcessor?.setTimbre(timbre)
+    }
+
+    /// Set mixer volume directly (used for scan-progress audio fade).
+    func setVolume(_ volume: Float) {
+        mixer.volume = max(0.0, min(1.0, volume))
+    }
+
+    /// Whether the audio graph has been configured with room dimensions.
+    var isConfigured: Bool { oscillatorBank != nil }
+
+    /// Update oscillator frequencies and reverb without rebuilding the audio graph.
+    /// Use for live dimension refinement after initial configure().
+    func updateForNewDimensions(dimensions: RoomDimensions, modes: [RoomMode]) {
+        oscillatorBank?.configure(modes: modes)
+        timbreProcessor?.configureReverb(rt60: dimensions.estimatedRT60)
+        logger.info("Dimensions updated in-place: \(modes.count) modes, RT60=\(dimensions.estimatedRT60)s")
+    }
+
+    /// Start the engine and fade mixer volume from 0 to 1 over duration.
+    func startWithFadeIn(duration: TimeInterval = 3.0) {
+        mixer.volume = 0.0
+        start()
+
+        let steps = 60
+        let interval = duration / Double(steps)
+        var currentStep = 0
+
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] timer in
+            currentStep += 1
+            let progress = Float(currentStep) / Float(steps)
+            self?.mixer.volume = progress
+            if currentStep >= steps {
+                timer.invalidate()
+                self?.mixer.volume = 1.0
+            }
+        }
+    }
+
+    /// Fade out and stop the engine.
+    func stopWithFadeOut(duration: TimeInterval = 0.5) {
+        let steps = 15
+        let interval = duration / Double(steps)
+        var currentStep = 0
+        let startVolume = mixer.volume
+
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] timer in
+            currentStep += 1
+            let progress = Float(currentStep) / Float(steps)
+            self?.mixer.volume = startVolume * (1.0 - progress)
+            if currentStep >= steps {
+                timer.invalidate()
+                self?.stop()
+            }
+        }
+    }
+
     // MARK: - Private
 
     private func configureAudioSession() {
@@ -43,52 +154,5 @@ final class RoomAudioEngine {
         } catch {
             logger.error("Failed to configure audio session: \(error.localizedDescription)")
         }
-    }
-
-    private func setupGraph() {
-        let outputFormat = engine.outputNode.inputFormat(forBus: 0)
-        let sampleRate = Float(outputFormat.sampleRate)
-
-        engine.attach(mixer)
-
-        // Phase accumulator — lives outside the closure, accessed only by the audio thread.
-        // Using UnsafeMutablePointer for zero-overhead, lock-free access.
-        let phasePointer = UnsafeMutablePointer<Float>.allocate(capacity: 1)
-        phasePointer.initialize(to: 0.0)
-
-        let frequency: Float = 440.0
-        let amplitude: Float = 0.3
-        let twoPi = Float.pi * 2.0
-
-        let source = AVAudioSourceNode(format: outputFormat) { _, _, frameCount, audioBufferList -> OSStatus in
-            let bufferListPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
-            let phaseIncrement = twoPi * frequency / sampleRate
-
-            for frame in 0..<Int(frameCount) {
-                let sample = amplitude * sin(phasePointer.pointee)
-                phasePointer.pointee += phaseIncrement
-
-                // Wrap phase to prevent float precision loss over time
-                if phasePointer.pointee >= twoPi {
-                    phasePointer.pointee -= twoPi
-                }
-
-                for buffer in bufferListPointer {
-                    guard let data = buffer.mData?.assumingMemoryBound(to: Float.self) else { continue }
-                    data[frame] = sample
-                }
-            }
-
-            return noErr
-        }
-
-        engine.attach(source)
-        engine.connect(source, to: mixer, format: outputFormat)
-        engine.connect(mixer, to: engine.outputNode, format: outputFormat)
-        engine.prepare()
-
-        sourceNode = source
-
-        logger.info("Audio graph configured: source(\(frequency)Hz) → mixer → output @ \(sampleRate)Hz")
     }
 }
