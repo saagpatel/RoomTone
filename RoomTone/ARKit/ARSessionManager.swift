@@ -4,6 +4,9 @@ import os
 
 /// Manages the ARSession lifecycle, plane detection, coordinate remapping,
 /// and bridges ARKit data into RoomModel and AppState.
+///
+/// ARSessionDelegate callbacks arrive on a background serial queue.
+/// All @Observable state mutations are dispatched to the main thread.
 @Observable
 final class ARSessionManager: NSObject {
 
@@ -24,6 +27,7 @@ final class ARSessionManager: NSObject {
     private var geometryProcessor = RoomGeometryProcessor()
     private var lastFrameTime: TimeInterval = 0
     private var timeoutTimer: Timer?
+    private var warningTimer: Timer?
     private var isConfirmed = false
     private let logger = Logger(subsystem: "com.roomtone.app", category: "ARSessionManager")
     private let wireframeManager = WireframeOverlayManager()
@@ -63,15 +67,14 @@ final class ARSessionManager: NSObject {
         isSessionRunning = true
         appState?.scanPhase = .scanning(progress: 0.0)
 
-        startTimeoutTimer()
+        startTimeoutTimers()
         logger.info("AR session started — scanning")
     }
 
     func pauseScanning() {
         sceneView.session.pause()
         isSessionRunning = false
-        timeoutTimer?.invalidate()
-        timeoutTimer = nil
+        invalidateTimers()
         logger.info("AR session paused")
     }
 
@@ -83,11 +86,11 @@ final class ARSessionManager: NSObject {
 
     // MARK: - Timeout
 
-    private func startTimeoutTimer() {
-        timeoutTimer?.invalidate()
+    private func startTimeoutTimers() {
+        invalidateTimers()
 
         // 20s check for no-enclosure
-        DispatchQueue.main.asyncAfter(deadline: .now() + 20) { [weak self] in
+        warningTimer = Timer.scheduledTimer(withTimeInterval: 20, repeats: false) { [weak self] _ in
             guard let self, !self.isConfirmed else { return }
             if self.geometryProcessor.scanProgress < 0.66 {
                 self.appState?.scanPhase = .failed(reason: .noEnclosure)
@@ -103,7 +106,14 @@ final class ARSessionManager: NSObject {
         }
     }
 
-    // MARK: - Plane processing bridge
+    private func invalidateTimers() {
+        warningTimer?.invalidate()
+        warningTimer = nil
+        timeoutTimer?.invalidate()
+        timeoutTimer = nil
+    }
+
+    // MARK: - Plane processing bridge (always called on main thread)
 
     private func processPlaneAnchors() {
         guard !isConfirmed else { return }
@@ -126,25 +136,21 @@ final class ARSessionManager: NSObject {
             if let candidate = geometryProcessor.latestCandidate,
                let audioEngine, let roomModel {
                 if !audioEngine.isConfigured {
-                    // First valid dimensions — configure and start at volume 0
                     roomModel.updateDimensions(candidate)
                     audioEngine.configure(dimensions: candidate, modes: roomModel.modes)
                     audioEngine.setVolume(0.0)
                     audioEngine.start()
                     logger.info("Audio started during scanning with preliminary dimensions")
                 } else {
-                    // Update frequencies as dimensions refine
                     roomModel.updateDimensions(candidate)
                     audioEngine.updateForNewDimensions(dimensions: candidate, modes: roomModel.modes)
                 }
-                // Tie volume to scan progress
                 audioEngine.setVolume(progress)
             }
 
         case .confirmed(let dimensions):
             isConfirmed = true
-            timeoutTimer?.invalidate()
-            timeoutTimer = nil
+            invalidateTimers()
             roomModel?.updateDimensions(dimensions)
             roomModel?.isEnclosureConfirmed = true
             appState?.scanPhase = .confirmed(dimensions: dimensions)
@@ -180,60 +186,76 @@ final class ARSessionManager: NSObject {
 }
 
 // MARK: - ARSessionDelegate
+//
+// All callbacks arrive on ARKit's background serial queue.
+// State mutations are dispatched to main thread to avoid data races
+// with @Observable property reads from SwiftUI.
 
 extension ARSessionManager: ARSessionDelegate {
 
     func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
-        let planes = anchors.compactMap { $0 as? ARPlaneAnchor }
-        guard !planes.isEmpty else { return }
+        let newPlanes = anchors.compactMap { $0 as? ARPlaneAnchor }.map(PlaneInfo.init)
+        guard !newPlanes.isEmpty else { return }
 
-        for plane in planes {
-            detectedPlanes.append(PlaneInfo(plane))
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.detectedPlanes.append(contentsOf: newPlanes)
+            self.processPlaneAnchors()
         }
-        processPlaneAnchors()
     }
 
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
-        let planes = anchors.compactMap { $0 as? ARPlaneAnchor }
-        guard !planes.isEmpty else { return }
+        let updatedPlanes = anchors.compactMap { $0 as? ARPlaneAnchor }.map(PlaneInfo.init)
+        guard !updatedPlanes.isEmpty else { return }
 
-        for plane in planes {
-            let info = PlaneInfo(plane)
-            if let idx = detectedPlanes.firstIndex(where: { $0.id == info.id }) {
-                detectedPlanes[idx] = info
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            for plane in updatedPlanes {
+                if let idx = self.detectedPlanes.firstIndex(where: { $0.id == plane.id }) {
+                    self.detectedPlanes[idx] = plane
+                }
             }
+            self.processPlaneAnchors()
         }
-        processPlaneAnchors()
     }
 
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        guard isSessionRunning, let roomModel, let audioEngine else { return }
+        guard isSessionRunning else { return }
 
-        // 1. Coordinate remap: ARKit Y-up → model Z-up
+        // Extract values from frame on the ARKit queue (safe — frame is retained)
         let arPos = frame.camera.transform.columns.3
-        roomModel.playerPosition = simd_float3(arPos.x, arPos.z, arPos.y)
-
-        // Push audio updates once engine is configured (during scanning or after confirmation)
-        guard audioEngine.isConfigured else { return }
-
-        // 2. LFO advance with real deltaTime
+        let modelPosition = simd_float3(arPos.x, arPos.z, arPos.y)
         let timestamp = frame.timestamp
-        if lastFrameTime > 0 {
-            let dt = Float(timestamp - lastFrameTime)
-            roomModel.advanceLFO(deltaTime: min(dt, 0.1)) // cap at 100ms to handle pauses
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let roomModel = self.roomModel, let audioEngine = self.audioEngine else { return }
+
+            // 1. Coordinate remap: ARKit Y-up → model Z-up
+            roomModel.playerPosition = modelPosition
+
+            // Push audio updates once engine is configured
+            guard audioEngine.isConfigured else { return }
+
+            // 2. LFO advance with real deltaTime
+            if self.lastFrameTime > 0 {
+                let dt = Float(timestamp - self.lastFrameTime)
+                roomModel.advanceLFO(deltaTime: min(dt, 0.1))
+            }
+            self.lastFrameTime = timestamp
+
+            // 3. Push amplitudes to audio engine
+            let amps = roomModel.modeAmplitudes()
+            audioEngine.updateAmplitudes(amps)
+
+            // 4. Cache dominant mode for UI
+            roomModel.dominantModeIndex = amps.enumerated().max(by: { $0.element < $1.element })?.offset
         }
-        lastFrameTime = timestamp
-
-        // 3. Push amplitudes to audio engine
-        let amps = roomModel.modeAmplitudes()
-        audioEngine.updateAmplitudes(amps)
-
-        // 4. Cache dominant mode for UI
-        roomModel.dominantModeIndex = amps.enumerated().max(by: { $0.element < $1.element })?.offset
     }
 
     func session(_ session: ARSession, didFailWithError error: Error) {
         logger.error("AR session failed: \(error.localizedDescription)")
-        appState?.scanPhase = .failed(reason: .timeout)
+        DispatchQueue.main.async { [weak self] in
+            self?.appState?.scanPhase = .failed(reason: .timeout)
+        }
     }
 }

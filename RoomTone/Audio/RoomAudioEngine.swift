@@ -8,10 +8,14 @@ final class RoomAudioEngine {
     private var oscillatorBank: OscillatorBank?
     private var timbreProcessor: TimbreProcessor?
     private(set) var recorder: AudioRecorder?
+    private var fadeTimer: Timer?
 
     private let logger = Logger(subsystem: "com.roomtone.app", category: "AudioEngine")
 
     var isRunning: Bool { engine.isRunning }
+
+    /// Whether the audio graph has been configured with room dimensions.
+    var isConfigured: Bool { oscillatorBank != nil }
 
     init() {
         configureAudioSession()
@@ -30,6 +34,8 @@ final class RoomAudioEngine {
     }
 
     func stop() {
+        fadeTimer?.invalidate()
+        fadeTimer = nil
         guard engine.isRunning else { return }
         engine.stop()
         logger.info("Audio engine stopped")
@@ -38,8 +44,14 @@ final class RoomAudioEngine {
     // MARK: - Configuration
 
     /// Build the full audio graph and configure for the given room.
-    /// Call once after room dimensions are known.
+    /// Safe to call once. Subsequent dimension changes should use updateForNewDimensions().
     func configure(dimensions: RoomDimensions, modes: [RoomMode]) {
+        // Guard against double-configure — attaching already-attached nodes crashes AVAudioEngine
+        guard !isConfigured else {
+            updateForNewDimensions(dimensions: dimensions, modes: modes)
+            return
+        }
+
         let outputFormat = engine.outputNode.inputFormat(forBus: 0)
 
         // Create components
@@ -94,9 +106,6 @@ final class RoomAudioEngine {
         mixer.volume = max(0.0, min(1.0, volume))
     }
 
-    /// Whether the audio graph has been configured with room dimensions.
-    var isConfigured: Bool { oscillatorBank != nil }
-
     /// Update oscillator frequencies and reverb without rebuilding the audio graph.
     /// Use for live dimension refinement after initial configure().
     func updateForNewDimensions(dimensions: RoomDimensions, modes: [RoomMode]) {
@@ -107,6 +116,7 @@ final class RoomAudioEngine {
 
     /// Start the engine and fade mixer volume from 0 to 1 over duration.
     func startWithFadeIn(duration: TimeInterval = 3.0) {
+        fadeTimer?.invalidate()
         mixer.volume = 0.0
         start()
 
@@ -114,12 +124,13 @@ final class RoomAudioEngine {
         let interval = duration / Double(steps)
         var currentStep = 0
 
-        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] timer in
+        fadeTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] timer in
             currentStep += 1
             let progress = Float(currentStep) / Float(steps)
             self?.mixer.volume = progress
             if currentStep >= steps {
                 timer.invalidate()
+                self?.fadeTimer = nil
                 self?.mixer.volume = 1.0
             }
         }
@@ -127,17 +138,20 @@ final class RoomAudioEngine {
 
     /// Fade out and stop the engine.
     func stopWithFadeOut(duration: TimeInterval = 0.5) {
+        fadeTimer?.invalidate()
+
         let steps = 15
         let interval = duration / Double(steps)
         var currentStep = 0
         let startVolume = mixer.volume
 
-        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] timer in
+        fadeTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] timer in
             currentStep += 1
             let progress = Float(currentStep) / Float(steps)
             self?.mixer.volume = startVolume * (1.0 - progress)
             if currentStep >= steps {
                 timer.invalidate()
+                self?.fadeTimer = nil
                 self?.stop()
             }
         }

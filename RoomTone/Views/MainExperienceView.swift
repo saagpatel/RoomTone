@@ -129,8 +129,7 @@ struct MainExperienceView: View {
 
     private func shareFile(url: URL) {
         guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = scene.windows.first,
-              let rootVC = window.rootViewController else { return }
+              let rootVC = scene.keyWindow?.rootViewController else { return }
 
         let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
         rootVC.present(activityVC, animated: true)
