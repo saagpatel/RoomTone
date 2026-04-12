@@ -253,7 +253,7 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					80CEFA61EE24CDD9D4BC76D7 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 3TGZFKFNA4;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -350,7 +350,7 @@
 				CODE_SIGN_ENTITLEMENTS = RoomTone/Resources/RoomTone.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 3TGZFKFNA4;
 				INFOPLIST_FILE = RoomTone/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -526,7 +526,7 @@
 				CODE_SIGN_ENTITLEMENTS = RoomTone/Resources/RoomTone.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 3TGZFKFNA4;
 				INFOPLIST_FILE = RoomTone/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -39,7 +39,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.roomtone.app
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: ""
+        DEVELOPMENT_TEAM: 3TGZFKFNA4
     dependencies: []
     entitlements:
       path: RoomTone/Resources/RoomTone.entitlements
