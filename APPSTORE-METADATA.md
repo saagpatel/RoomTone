@@ -173,3 +173,6 @@ Character count: 120
 - [ ] `UIRequiredDeviceCapabilities` restriction means the App Store will automatically hide this app from users on non-LiDAR devices — verify this filter is active in Connect
 - [ ] TestFlight: tested on at least 3 room types (bedroom, kitchen, open-plan/garage as unsupported test), 0 crashes across all testers
 - [ ] App Review Notes field completed with LiDAR device requirement and test instructions
+
+## Copyright
+© 2026 saagpatel
