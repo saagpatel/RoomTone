@@ -83,9 +83,9 @@ Character count: 120
 
 | Field | URL |
 |---|---|
-| Support URL | https://[placeholder]/roomtone/support |
+| Support URL | https://github.com/saagpatel/RoomTone/issues |
 | Marketing URL | https://[placeholder]/roomtone |
-| Privacy Policy URL | https://[placeholder]/roomtone/privacy |
+| Privacy Policy URL | https://github.com/saagpatel/RoomTone/blob/main/PRIVACY.md |
 
 *Replace with actual URLs before submission.*
 
