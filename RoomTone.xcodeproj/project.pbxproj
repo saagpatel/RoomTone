@@ -254,7 +254,7 @@
 				TargetAttributes = {
 					80CEFA61EE24CDD9D4BC76D7 = {
 						DevelopmentTeam = 3TGZFKFNA4;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -348,15 +348,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RoomTone/Resources/RoomTone.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Distribution: SAAGAR I PATEL (3TGZFKFNA4)";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 3TGZFKFNA4;
 				INFOPLIST_FILE = RoomTone/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.roomtone.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.romtone.app;
+				PROVISIONING_PROFILE_SPECIFIER = "RoomTone App Store";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -371,7 +372,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.roomtone.app.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.romtone.app.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RoomTone.app/RoomTone";
@@ -512,7 +513,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.roomtone.app.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.romtone.app.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RoomTone.app/RoomTone";
@@ -524,15 +525,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RoomTone/Resources/RoomTone.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Distribution: SAAGAR I PATEL (3TGZFKFNA4)";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 3TGZFKFNA4;
 				INFOPLIST_FILE = RoomTone/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.roomtone.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.romtone.app;
+				PROVISIONING_PROFILE_SPECIFIER = "RoomTone App Store";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

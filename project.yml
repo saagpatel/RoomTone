@@ -28,8 +28,6 @@ targets:
         NSCameraUsageDescription: "Room Tone uses the camera to map room geometry for acoustic synthesis — no images are stored or transmitted."
         UIBackgroundModes:
           - audio
-        UIRequiredDeviceCapabilities:
-          - lidar-sensor
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationLandscapeLeft
@@ -37,9 +35,11 @@ targets:
           - UIInterfaceOrientationPortraitUpsideDown
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.roomtone.app
-        CODE_SIGN_STYLE: Automatic
+        PRODUCT_BUNDLE_IDENTIFIER: com.romtone.app
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "Apple Distribution: SAAGAR I PATEL (3TGZFKFNA4)"
         DEVELOPMENT_TEAM: 3TGZFKFNA4
+        PROVISIONING_PROFILE_SPECIFIER: RoomTone App Store
     dependencies: []
     entitlements:
       path: RoomTone/Resources/RoomTone.entitlements
@@ -53,4 +53,4 @@ targets:
       - target: RoomTone
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.roomtone.app.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.romtone.app.tests
