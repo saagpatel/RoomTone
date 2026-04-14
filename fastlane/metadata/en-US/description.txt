@@ -1,0 +1,32 @@
+Every room has a voice. Room Tone lets you hear it.
+
+Physics says that any enclosed space has natural resonant frequencies — specific pitches determined by its exact dimensions. A 4-meter room resonates at 42.75 Hz along its length. Your bedroom, your kitchen, a parking garage — each one has a unique acoustic fingerprint that has always been there, inaudible until now.
+
+Room Tone uses your iPhone Pro's LiDAR scanner to map your room's geometry in seconds, then synthesizes a real-time soundscape from its resonant modes. Walk toward a wall and that wall's frequency rises in the mix. Stand in a corner and the converging modes create something no speaker, no synthesizer, and no recording has ever produced — the voice of that specific space.
+
+How it works
+
+Point your iPhone around the room for a few seconds. Room Tone detects the floor, walls, and ceiling through ARKit plane detection, computes the room's axial, tangential, and oblique resonant modes, and brings up to 16 oscillators tuned precisely to those frequencies. The result is a generative soundscape that exists only in this room, only right now.
+
+Move through the space and the sound changes. The synthesizer tracks your position continuously — amplitude rises as you approach the wall whose frequency is playing, falls as you move away. The room becomes a spatial instrument.
+
+Two timbres
+
+Switch between Drone and Ambient at any time:
+
+- Drone — pure sine oscillators with a subtle second harmonic and a slow 0.1 Hz pitch drift that gives the sound organic warmth
+- Ambient — the same oscillators processed through a granular time-stretch algorithm, creating a textural, cloud-like soundscape from the same room geometry
+
+Record and share
+
+Tap the record button to capture a WAV recording of your room's voice. Share it directly from the app — to Voice Memos, Files, AirDrop, or any other destination. Every room produces a unique recording.
+
+Requirements
+
+Room Tone requires a LiDAR-equipped device: iPhone 12 Pro, iPhone 13 Pro, iPhone 14 Pro, iPhone 15 Pro, iPhone 16 Pro, or any iPad Pro with LiDAR. The app displays a clear explanation screen on unsupported devices.
+
+Room Tone works best in enclosed spaces with a ceiling. Open-plan spaces and outdoor environments will produce a prompt to try an enclosed room, with the option to continue with estimated dimensions.
+
+No microphone. No recording of your environment.
+
+Room Tone synthesizes audio entirely from geometry — it does not listen to your room. The camera is used only for LiDAR spatial mapping; no images are stored or transmitted. There is no backend, no user account, no analytics, and no network connection of any kind.
