@@ -43,3 +43,44 @@ See IMPLEMENTATION-ROADMAP.md for full phase details, acceptance criteria, and v
 - Do not use AVAudioEnvironmentNode for positional audio — manual amplitude control only
 - Do not add a non-LiDAR fallback path in v1 — UnsupportedDeviceView is the correct behavior
 - Do not add features not in the current phase of IMPLEMENTATION-ROADMAP.md
+
+<!-- portfolio-context:start -->
+# Portfolio Context
+
+## What This Project Is
+
+Room Tone is a LiDAR-required iOS app (iPhone Pro / iPad Pro) that maps physical room geometry via ARKit Scene Reconstruction and synthesizes a real-time soundscape derived from the room's resonant modes. The player's position modulates which frequencies dominate. Two audio timbres (Drone, Ambient), audio recording, and a minimal AR visual overlay complete the experience. Primary goals: App Store release + viral demo video as portfolio showcase.
+
+## Current State
+
+**Phase 0: Foundation (Weeks 1–2)**
+See IMPLEMENTATION-ROADMAP.md for full phase details, acceptance criteria, and verification checklists.
+
+## Stack
+
+- Swift: 5.10
+- SwiftUI: iOS 17+ minimum deployment target
+- ARKit: 6.0 — Scene Reconstruction + plane detection; LiDAR device required
+- AVAudioEngine / AVFoundation: iOS 17 — real-time audio graph, synthesis, recording
+- simd: built-in Swift — vector math for position/distance calculations
+- Xcode: 16.x
+- No third-party dependencies — pure Apple frameworks only
+
+## How To Run
+
+Build and run on a LiDAR-equipped device. Tap **Scan** and move your phone around the room perimeter, then tap **Synthesize** to hear your room's resonant modes.
+
+## Known Risks
+
+- Do not use RealityKit — ARKit direct + SceneKit for the overlay is sufficient and lighter
+- Do not put ARKit session setup on a background thread — ARSession must run on main thread
+- Do not allocate memory inside AVAudioSourceNode render callbacks — use pre-allocated Float buffers
+- Do not use AVAudioEnvironmentNode for positional audio — manual amplitude control only
+- Do not add a non-LiDAR fallback path in v1 — UnsupportedDeviceView is the correct behavior
+- Do not add features not in the current phase of IMPLEMENTATION-ROADMAP.md
+
+## Next Recommended Move
+
+Use this context plus the README and supporting docs to resume the next active task, then promote the repo beyond minimum-viable by capturing a dedicated handoff, roadmap, or discovery artifact.
+
+<!-- portfolio-context:end -->
