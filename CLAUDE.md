@@ -21,8 +21,8 @@ Room Tone is a LiDAR-required iOS app (iPhone Pro / iPad Pro) that maps physical
 - Conventional commits: feat:, fix:, chore:, test:
 
 ## Current Phase
-**Phase 0: Foundation (Weeks 1–2)**
-See IMPLEMENTATION-ROADMAP.md for full phase details, acceptance criteria, and verification checklists.
+**All phases complete — pending device testing on LiDAR hardware**
+See IMPLEMENTATION-ROADMAP.md for full phase details. See HANDOFF.md for next steps (device test → TestFlight → App Store submission).
 
 ## Key Decisions
 | Decision | Choice | Why |
@@ -53,8 +53,8 @@ Room Tone is a LiDAR-required iOS app (iPhone Pro / iPad Pro) that maps physical
 
 ## Current State
 
-**Phase 0: Foundation (Weeks 1–2)**
-See IMPLEMENTATION-ROADMAP.md for full phase details, acceptance criteria, and verification checklists.
+**All phases complete — pending device testing on LiDAR hardware**
+See HANDOFF.md for current status and next steps (device test → TestFlight → App Store submission).
 
 ## Stack
 
@@ -81,6 +81,6 @@ Build and run on a LiDAR-equipped device. Tap **Scan** and move your phone aroun
 
 ## Next Recommended Move
 
-Use this context plus the README and supporting docs to resume the next active task, then promote the repo beyond minimum-viable by capturing a dedicated handoff, roadmap, or discovery artifact.
+Run on a LiDAR-equipped device (iPhone 12 Pro+ or iPad Pro 2020+) to complete end-to-end QA, then proceed to TestFlight and App Store submission. See HANDOFF.md for the full step-by-step sequence.
 
 <!-- portfolio-context:end -->

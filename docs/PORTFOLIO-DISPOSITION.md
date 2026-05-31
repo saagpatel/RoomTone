@@ -47,10 +47,10 @@ Specifically verified on `origin/main`:
 ## Current state in one paragraph
 
 Room Tone is a SwiftUI + ARKit iOS app that uses **LiDAR** to scan
-the geometry of the user's room and **microphone capture** to
-measure the room's acoustic response, then synthesizes ambient /
-drone audio shaped by the measured resonance — "hear your room's
-resonance." Per memory: all phases done, pending device test (LiDAR
+the geometry of the user's room and **synthesizes ambient / drone
+audio** shaped by the computed resonant modes of that geometry —
+"hear your room's resonance." No microphone is used; all audio is
+synthesized from the ARKit plane-detection data. Per memory: all phases done, pending device test (LiDAR
 hardware required for QA). The release commits on canonical main
 confirm full App Store prep cadence, including the **`dc6d4fe`
 PrivacyInfo.xcprivacy UserDefaults declaration** (Apple's iOS 17+
@@ -93,20 +93,17 @@ Pricing: $2.99 = third paid iOS app (Liminal $4.99 / Redact $3.99 /
    supported devices, but redundant copy in description ("Requires
    LiDAR; iPad Pro 2020+ or iPhone 12 Pro+") preempts 1-star
    reviews from non-LiDAR users.
-3. **Microphone usage description** — privacy nutrition labels +
-   `NSMicrophoneUsageDescription` in Info.plist must reflect the
-   acoustic-measurement purpose clearly.
-4. **Verify PrivacyInfo.xcprivacy completeness** — `dc6d4fe`
+3. **Verify PrivacyInfo.xcprivacy completeness** — `dc6d4fe`
    added UserDefaults declaration; verify other Required Reason
    APIs (file timestamp, disk space, system boot time, active
-   keyboards) are also declared if used.
-5. **Music-category review** — Music reviewers expect audio
-   demos. Submission note: "Audio sample requires LiDAR scan +
-   mic input; provide test environment if reviewer cannot
-   demonstrate."
-6. **Refreshed screenshots in local stash** (screenshot-1, -2, -3
+   keyboards) are also declared if used. Do NOT add
+   `NSMicrophoneUsageDescription` — the app uses no microphone.
+4. **Music-category review** — Music reviewers expect audio
+   demos. Submission note: "Audio sample requires LiDAR scan;
+   provide test environment if reviewer cannot demonstrate."
+5. **Refreshed screenshots in local stash** (screenshot-1, -2, -3
    modified) — decide whether to commit and re-upload.
-7. **Submit for Review.**
+6. **Submit for Review.**
 
 Estimated operator time: ~4-5 hours (LiDAR device test is the
 constraint; if operator has LiDAR-equipped device on hand,
@@ -126,7 +123,7 @@ faster).
 | Co-batch with | iOS App Store cluster — **now 8 repos** |
 | Special concern | **LiDAR device support matrix in App Store listing.** Non-LiDAR users will leave 1-star reviews if not declared. |
 | Special concern | **PrivacyInfo.xcprivacy Required Reason APIs.** `dc6d4fe` added UserDefaults; audit other RR API usages. Pattern worth applying to all iOS cluster members. |
-| Special concern | **Microphone usage description clarity.** Acoustic measurement is unfamiliar to most users; explicit purpose string reduces grant friction. |
+| Special concern | **No microphone is used.** All audio is synthesized from LiDAR geometry. Do NOT add `NSMicrophoneUsageDescription` — would cause App Store confusion. |
 | Special concern | **Refreshed screenshots in local stash.** Resolve before submission. |
 
 ---
