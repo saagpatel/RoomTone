@@ -85,3 +85,8 @@ Build and run on a LiDAR-equipped device. Tap **Scan** and move your phone aroun
 Run on a LiDAR-equipped device (iPhone 12 Pro+ or iPad Pro 2020+) to complete end-to-end QA, then proceed to TestFlight and App Store submission. See HANDOFF.md for the full step-by-step sequence.
 
 <!-- portfolio-context:end -->
+
+<!-- secondbrain-breadcrumb -->
+## SecondBrain knowledge vault
+
+Prior lessons, decisions, and context for this project live in SecondBrain at `wiki/maps/projects/room-tone.md`. The whole vault is searchable via the `engraph` MCP — query it for this project + its stack before non-trivial work.
