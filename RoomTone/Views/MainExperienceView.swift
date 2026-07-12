@@ -9,6 +9,8 @@ struct MainExperienceView: View {
 
     @AppStorage("showTechnicalOverlay") private var showTechnicalOverlay = false
     @State private var showSettings = false
+    @State private var lastRecordingURL: URL?
+    @State private var recordingError: String?
 
     var body: some View {
         ZStack {
@@ -37,6 +39,14 @@ struct MainExperienceView: View {
         }
         .sheet(isPresented: $showSettings) {
             SettingsView(roomModel: roomModel)
+        }
+        .alert("Recording Unavailable", isPresented: Binding(
+            get: { recordingError != nil },
+            set: { if !$0 { recordingError = nil } }
+        )) {
+            Button("OK", role: .cancel) { recordingError = nil }
+        } message: {
+            Text(recordingError ?? "The recording could not be started.")
         }
         .onAppear {
             if !audioEngine.isConfigured {
@@ -104,10 +114,15 @@ struct MainExperienceView: View {
                 Button {
                     if recorder.isRecording {
                         if let url = recorder.stopRecording() {
-                            shareFile(url: url)
+                            lastRecordingURL = url
                         }
                     } else {
-                        try? recorder.startRecording()
+                        lastRecordingURL = nil
+                        do {
+                            try recorder.startRecording()
+                        } catch {
+                            recordingError = error.localizedDescription
+                        }
                     }
                 } label: {
                     HStack {
@@ -121,17 +136,21 @@ struct MainExperienceView: View {
                 }
                 .buttonStyle(.bordered)
                 .tint(.white)
+
+                if let lastRecordingURL {
+                    ShareLink(item: lastRecordingURL) {
+                        Label("Share Recording", systemImage: "square.and.arrow.up")
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 44)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.white)
+                    .foregroundStyle(.black)
+                }
             }
         }
         .padding(20)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
     }
 
-    private func shareFile(url: URL) {
-        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let rootVC = scene.keyWindow?.rootViewController else { return }
-
-        let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        rootVC.present(activityVC, animated: true)
-    }
 }

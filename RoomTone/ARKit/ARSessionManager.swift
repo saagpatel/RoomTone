@@ -1,4 +1,5 @@
 import ARKit
+import AVFoundation
 import SceneKit
 import os
 
@@ -53,6 +54,27 @@ final class ARSessionManager: NSObject {
     // MARK: - Lifecycle
 
     func startScanning() {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            beginARSession()
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+                DispatchQueue.main.async {
+                    if granted {
+                        self?.beginARSession()
+                    } else {
+                        self?.appState?.scanPhase = .failed(reason: .cameraDenied)
+                    }
+                }
+            }
+        case .denied, .restricted:
+            appState?.scanPhase = .failed(reason: .cameraDenied)
+        @unknown default:
+            appState?.scanPhase = .failed(reason: .cameraDenied)
+        }
+    }
+
+    private func beginARSession() {
         let config = ARWorldTrackingConfiguration()
         config.sceneReconstruction = .mesh
         config.planeDetection = [.horizontal, .vertical]

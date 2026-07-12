@@ -34,13 +34,13 @@ Character count: 88
 
 **Every room has a voice. Room Tone lets you hear it.**
 
-Physics says that any enclosed space has natural resonant frequencies — specific pitches determined by its exact dimensions. A 4-meter room resonates at 42.75 Hz along its length. Your bedroom, your kitchen, a parking garage — each one has a unique acoustic fingerprint that has always been there, inaudible until now.
+Enclosed spaces have natural resonant frequencies—specific pitches related to their dimensions. A 4-meter room has an axial mode near 42.9 Hz along its length. Your bedroom, your kitchen, or a parking garage can each produce a different modeled soundscape.
 
-Room Tone uses your iPhone Pro's LiDAR scanner to map your room's geometry in seconds, then synthesizes a real-time soundscape from its resonant modes. Walk toward a wall and that wall's frequency rises in the mix. Stand in a corner and the converging modes create something no speaker, no synthesizer, and no recording has ever produced — the voice of that specific space.
+Room Tone uses a supported device's LiDAR scanner to estimate room geometry, then synthesizes a real-time soundscape from calculated resonant modes. Walk toward a wall and that wall's modeled modes rise in the mix. Stand in a corner and converging modes shape the sound of that estimated space.
 
 **How it works**
 
-Point your iPhone around the room for a few seconds. Room Tone detects the floor, walls, and ceiling through ARKit plane detection, computes the room's axial, tangential, and oblique resonant modes, and brings up to 16 oscillators tuned precisely to those frequencies. The result is a generative soundscape that exists only in this room, only right now.
+Point your device around the room. Room Tone detects available floor, wall, ceiling, and mesh geometry through ARKit, estimates room dimensions, computes axial, tangential, and oblique modes, and drives up to 16 oscillators from those calculations.
 
 Move through the space and the sound changes. The synthesizer tracks your position continuously — amplitude rises as you approach the wall whose frequency is playing, falls as you move away. The room becomes a spatial instrument.
 
@@ -57,7 +57,7 @@ Tap the record button to capture a WAV recording of your room's voice. Share it 
 
 **Requirements**
 
-Room Tone requires a LiDAR-equipped device: iPhone 12 Pro, iPhone 13 Pro, iPhone 14 Pro, iPhone 15 Pro, iPhone 16 Pro, or any iPad Pro with LiDAR. The app displays a clear explanation screen on unsupported devices.
+Room Tone requires a supported iPhone Pro or iPad Pro with LiDAR mesh reconstruction. The app displays a clear explanation screen on unsupported devices.
 
 Room Tone works best in enclosed spaces with a ceiling. Open-plan spaces and outdoor environments will produce a prompt to try an enclosed room, with the option to continue with estimated dimensions.
 
@@ -84,7 +84,7 @@ Character count: 120
 | Field | URL |
 |---|---|
 | Support URL | https://github.com/saagpatel/RoomTone/issues |
-| Marketing URL | https://[placeholder]/roomtone |
+| Marketing URL | https://github.com/saagpatel/RoomTone |
 | Privacy Policy URL | https://github.com/saagpatel/RoomTone/blob/main/PRIVACY.md |
 
 *Replace with actual URLs before submission.*
@@ -115,7 +115,7 @@ Character count: 120
 
 ## App Review Notes
 
-**Device requirement:** Room Tone requires LiDAR hardware. Testing on an unsupported device (any non-Pro iPhone, or iPhone Pro earlier than 12 Pro) will show the `UnsupportedDeviceView` screen — this is correct and intentional behavior, not a bug. The `UIRequiredDeviceCapabilities` key in `Info.plist` includes `lidar-sensor`, which restricts App Store visibility to compatible devices.
+**Device requirement:** Room Tone's core experience requires LiDAR mesh reconstruction. On unsupported hardware, the app shows `UnsupportedDeviceView` rather than attempting a scan. Confirm the current compatible-device list and App Store availability settings before submission; the binary performs a runtime capability check and does not claim a LiDAR-specific App Store filter.
 
 **Camera permission:** The app requests camera access for ARKit LiDAR scanning only. The exact permission string is: *"Room Tone uses the camera to map room geometry for acoustic synthesis — no images are stored or transmitted."* No `AVCaptureSession` is used; no photos or video are captured or stored.
 
@@ -158,8 +158,8 @@ Character count: 120
 
 ### Build
 - [ ] `xcodebuild archive` succeeds on Release scheme, zero warnings under Swift 5.10
-- [ ] Privacy manifest (`PrivacyInfo.xcprivacy`) declares: camera used for room mapping, no data collection, no tracking, no required-reason APIs
-- [ ] `Info.plist` contains `UIRequiredDeviceCapabilities` → `lidar-sensor`
+- [ ] Privacy manifest (`PrivacyInfo.xcprivacy`) declares no tracking or collected data and the UserDefaults required-reason API
+- [ ] `Info.plist` declares the supported `arkit` capability; runtime unsupported-device path verified on non-LiDAR hardware
 - [ ] `Info.plist` contains `NSCameraUsageDescription` with exact approved text
 - [ ] `Info.plist` contains `UIBackgroundModes` → `audio`
 - [ ] App icon present in all required sizes
@@ -170,7 +170,7 @@ Character count: 120
 - [ ] Export compliance: standard encryption only (HTTPS) — answer "No" to proprietary encryption
 - [ ] Primary category: Music; Secondary: Utilities
 - [ ] Price: $2.99
-- [ ] `UIRequiredDeviceCapabilities` restriction means the App Store will automatically hide this app from users on non-LiDAR devices — verify this filter is active in Connect
+- [ ] Compatible-device availability reviewed in App Store Connect; do not claim LiDAR-only filtering without live confirmation
 - [ ] TestFlight: tested on at least 3 room types (bedroom, kitchen, open-plan/garage as unsupported test), 0 crashes across all testers
 - [ ] App Review Notes field completed with LiDAR device requirement and test instructions
 

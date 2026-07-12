@@ -26,7 +26,7 @@ struct OnboardingView: View {
                 onboardingPage(
                     icon: "sensor.fill",
                     title: "LiDAR maps the geometry.",
-                    body: "Your device's LiDAR sensor scans the room's dimensions in seconds. The synthesized soundscape is derived entirely from the physical space.",
+                    body: "On supported devices, LiDAR helps estimate the room's dimensions. The soundscape is synthesized locally from that estimated geometry; no microphone is used.",
                     tag: 2,
                     showButton: true
                 )
