@@ -235,7 +235,7 @@ AVAudioSourceNode (×16, one per mode)
 # - Info.plist keys to add manually:
 #   NSCameraUsageDescription: "Room Tone uses the camera to map room geometry 
 #     for acoustic synthesis — no images are stored or transmitted."
-#   UIRequiredDeviceCapabilities → lidar-sensor (array entry)
+#   UIRequiredDeviceCapabilities → arkit (array entry); LiDAR remains runtime-checked
 ```
 
 ---
@@ -284,7 +284,7 @@ AVAudioSourceNode (×16, one per mode)
 - **Camera usage:** ARKit only. No `AVCaptureSession`, no `PHPhotoLibrary`, no image storage. `NSCameraUsageDescription` must be specific: *"Room Tone uses the camera to map room geometry for acoustic synthesis — no images are stored or transmitted."*
 - **Recorded audio:** Written to `FileManager.default.temporaryDirectory` only. Handed to `UIActivityViewController` for user control. Deleted from temp on next app launch.
 - **Privacy manifest (PrivacyInfo.xcprivacy):** Required for App Store. Declare: no data collection, camera used for room mapping (not stored), no tracking, no required reason APIs used.
-- **`UIRequiredDeviceCapabilities`:** Add `lidar-sensor` to Info.plist so App Store gates to compatible devices.
+- **`UIRequiredDeviceCapabilities`:** Declare Apple's supported `arkit` capability and retain the runtime LiDAR mesh-reconstruction check. Apple does not document a `lidar-sensor` capability key.
 
 ---
 
@@ -295,14 +295,14 @@ AVAudioSourceNode (×16, one per mode)
 **Tasks:**
 1. Create Xcode project: App template, SwiftUI interface, iOS 17.0 minimum deployment target, Team set to your developer account — **Acceptance:** App runs on physical device and in simulator without warnings or signing errors
 2. Add LiDAR device capability check: in `RoomToneApp.swift`, call `ARWorldTrackingConfiguration.supportsSceneReconstruction(.mesh)` at launch; if false, present `UnsupportedDeviceView` and disable all AR — **Acceptance:** iPhone 13 Pro shows experience; iPhone 11 shows `UnsupportedDeviceView` (use an older device or have a colleague test)
-3. Configure `Info.plist`: add `NSCameraUsageDescription` (exact text from Security section above); add `UIBackgroundModes` array with `audio` value; add `UIRequiredDeviceCapabilities` array with `lidar-sensor` entry — **Acceptance:** Running on device, camera permission prompt appears with correct description text; no entitlement warnings in Xcode build log
+3. Configure `Info.plist`: add `NSCameraUsageDescription` (exact text from Security section above); add `UIBackgroundModes` array with `audio` value; add `UIRequiredDeviceCapabilities` array with Apple's supported `arkit` entry; keep LiDAR as a runtime capability check — **Acceptance:** Running on device, camera permission prompt appears with correct description text; no entitlement warnings in Xcode build log
 4. Build `AVAudioEngine` skeleton in `RoomAudioEngine.swift`: instantiate engine, attach `AVAudioMixerNode`, connect mixer → `engine.outputNode`, call `engine.prepare()` and `engine.start()` — **Acceptance:** No crash on launch; `engine.isRunning == true` logged to console on device
 5. Add one `AVAudioSourceNode` generating a 440Hz sine wave and connect it to the mixer; implement render callback with pre-allocated `[Float]` buffer — **Acceptance:** Audible 440Hz tone on device speaker; no audio glitches or dropouts over 60 seconds of playback
 6. Build `AppState.swift` with `ScanPhase` enum; build `ScanView.swift` shell with a "Start Scanning" button that transitions `AppState.phase` to `.scanning(progress: 0.0)` — **Acceptance:** Phase transitions compile cleanly; `ScanView` renders in Preview and on device
 
 **Verification checklist:**
 - [ ] Run on physical LiDAR device → single 440Hz sine plays for 60s, no glitch
-- [ ] Run on non-LiDAR device (or remove `lidar-sensor` capability temporarily) → `UnsupportedDeviceView` appears
+- [x] Run on non-LiDAR Simulator → `UnsupportedDeviceView` appears (verified July 2026)
 - [ ] Rotate device → `ScanView` layout adapts without overflow or clipping
 - [ ] Xcode Organizer → no crashes logged after 5 minutes of idle + tone playing
 

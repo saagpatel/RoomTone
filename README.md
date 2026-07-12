@@ -8,9 +8,9 @@ Room Tone uses the LiDAR scanner on supported iPhones and iPads to measure your 
 
 ## Features
 
-- **LiDAR room scanning** — ARKit plane detection and mesh reconstruction extract length × width × height automatically
+- **LiDAR room scanning** — ARKit plane detection and mesh reconstruction estimate length × width × height automatically
 - **Room mode calculator** — applies `f(n,m,l) = (c/2) × √((n/Lx)² + (m/Ly)² + (l/Lz)²)` for up to 16 axial, tangential, and oblique frequencies
-- **Real-time synthesis** — 16-oscillator AVAudioEngine bank tuned to those exact frequencies
+- **Real-time synthesis** — 16-oscillator AVAudioEngine bank tuned to frequencies calculated from the estimated geometry
 - **Positional amplitude** — move through the space and oscillator amplitudes respond to your standing-wave position
 - **Sabine reverb** — RT60 estimated from room volume and surface area for authentic acoustic character
 - **Audio recording** — capture the live output to a shareable file

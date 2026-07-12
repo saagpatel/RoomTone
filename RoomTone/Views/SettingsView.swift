@@ -39,6 +39,15 @@ struct SettingsView: View {
                         }
                     }
                 }
+
+                Section("About") {
+                    Link("Privacy Policy", destination: URL(string: "https://github.com/saagpatel/RoomTone/blob/main/PRIVACY.md")!)
+                    Link("Support", destination: URL(string: "https://github.com/saagpatel/RoomTone/issues")!)
+
+                    Text("Room geometry and synthesized recordings stay on this device unless you explicitly share a recording.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)

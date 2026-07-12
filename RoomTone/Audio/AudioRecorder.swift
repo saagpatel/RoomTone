@@ -36,6 +36,10 @@ final class AudioRecorder {
             commonFormat: format.commonFormat,
             interleaved: format.isInterleaved
         )
+        try FileManager.default.setAttributes(
+            [.protectionKey: FileProtectionType.complete],
+            ofItemAtPath: url.path
+        )
         audioFile = file
 
         engine.mainMixerNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, _ in

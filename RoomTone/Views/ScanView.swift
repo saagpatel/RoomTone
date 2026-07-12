@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct ScanView: View {
     @Bindable var appState: AppState
@@ -139,6 +140,14 @@ struct ScanView: View {
                 }
                 .buttonStyle(.bordered)
             }
+
+            if reason == .cameraDenied {
+                Button("Open Settings") {
+                    guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                    UIApplication.shared.open(url)
+                }
+                .buttonStyle(.bordered)
+            }
         }
         .padding(24)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
@@ -149,6 +158,7 @@ struct ScanView: View {
         case .noEnclosure: "No Enclosed Space"
         case .timeout: "Scan Timed Out"
         case .deviceUnsupported: "Unsupported Device"
+        case .cameraDenied: "Camera Access Required"
         }
     }
 
@@ -160,6 +170,8 @@ struct ScanView: View {
             "Could not detect room geometry. Try panning slowly around all walls."
         case .deviceUnsupported:
             "This device does not support LiDAR scanning."
+        case .cameraDenied:
+            "Allow camera access in Settings so ARKit can map room geometry. Room Tone does not save images or video."
         }
     }
 }

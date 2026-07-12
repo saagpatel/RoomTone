@@ -29,6 +29,7 @@ enum ScanFailureReason: Equatable {
     case noEnclosure
     case timeout
     case deviceUnsupported
+    case cameraDenied
 }
 
 enum AudioTimbre: Equatable {
