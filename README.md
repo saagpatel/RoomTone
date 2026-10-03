@@ -33,6 +33,32 @@ open RoomTone.xcodeproj
 ### Usage
 Build and run on a LiDAR-equipped device. Tap **Scan** and move your phone around the room perimeter, then tap **Synthesize** to hear your room's resonant modes.
 
+## Verification
+
+Run from the repository root. Use full Xcode with active Xcode developer tools and an installed iOS simulator;
+Command Line Tools alone cannot run these checks. `make test` generates the project
+with XcodeGen before running tests.
+
+```bash
+# Simulator unit suite; signing is disabled by the Makefile
+make test
+
+# Compile the Release configuration without signing or uploading an archive
+make release
+```
+
+The Makefile's simulator destination must exist locally. Override `SIMULATOR` if
+needed, for example `make test SIMULATOR='platform=iOS Simulator,name=iPhone 17'`
+for an installed simulator with that name. For a focused pure-data check, open the
+generated project in Xcode and run `RoomModeCalculatorTests` in the Test navigator.
+The broader simulator suite and Release build remain the checks before delivery.
+There is no configured standalone lint or formatter command.
+
+The focused calculator suite uses synthetic room dimensions and needs no LiDAR
+scan, microphone recording, or audio output. For UI/scan/synthesis changes, also
+check the affected flow on a LiDAR-equipped device with a disposable room scan;
+simulator unit tests do not establish sensor or audible behavior.
+
 ## Tech Stack
 
 | Layer | Technology |
