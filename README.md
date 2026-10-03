@@ -4,14 +4,14 @@
 
 > Your room has a sound. Room Tone lets you hear it.
 
-Room Tone uses the LiDAR scanner on supported iPhones and iPads to measure your room's physical dimensions, computes its acoustic resonant modes, and synthesizes those frequencies as audible sound. Walk around the space and hear how your position within the standing-wave field changes the character of what you're listening to.
+Room Tone uses the LiDAR scanner on supported iPhones and iPads to measure your room's physical dimensions, computes its acoustic resonant modes, and synthesizes those frequencies as audible sound. Walk around the space and hear how your proximity to the estimated walls changes the character of what you're listening to.
 
 ## Features
 
 - **LiDAR room scanning** — ARKit plane detection and mesh reconstruction estimate length × width × height automatically
 - **Room mode calculator** — applies `f(n,m,l) = (c/2) × √((n/Lx)² + (m/Ly)² + (l/Lz)²)` for up to 16 axial, tangential, and oblique frequencies
 - **Real-time synthesis** — 16-oscillator AVAudioEngine bank tuned to frequencies calculated from the estimated geometry
-- **Positional amplitude** — move through the space and oscillator amplitudes respond to your standing-wave position
+- **Positional amplitude** — move through the space and axial-mode amplitudes increase within 0.3m of the estimated walls, floor, or ceiling
 - **Sabine reverb** — RT60 estimated from room volume and surface area for authentic acoustic character
 - **Audio recording** — capture the live output to a shareable file
 
@@ -31,7 +31,7 @@ open RoomTone.xcodeproj
 ```
 
 ### Usage
-Build and run on a LiDAR-equipped device. Tap **Scan** and move your phone around the room perimeter, then tap **Synthesize** to hear your room's resonant modes.
+Build and run on a LiDAR-equipped device. Tap **Start Scanning** and move your phone around the room perimeter. Audio starts automatically once preliminary dimensions are available; scan confirmation opens the main experience.
 
 ## Verification
 
