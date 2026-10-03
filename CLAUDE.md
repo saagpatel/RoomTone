@@ -12,19 +12,19 @@ LiDAR-required iOS app (iPhone Pro / iPad Pro) that maps room geometry via ARKit
 
 ## Build / Test / Run
 
-Build and run on a LiDAR-equipped device (iPhone 12 Pro+ or iPad Pro 2020+). Unit tests required for all pure-math modules: `RoomModeCalculator`, `RoomGeometryProcessor`. Run via `xcodebuild test`.
+Build and run on a LiDAR-equipped device (iPhone 12 Pro+ or iPad Pro 2020+). Unit tests required for all pure-math modules: `RoomModeCalculator`, `RoomGeometryProcessor`. Run via `make test` (XcodeGen and full Xcode required; see README.md for simulator selection).
 
 ## Architecture Decisions
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
 | Device requirement | LiDAR required; `UnsupportedDeviceView` for others | Experience quality gap too large to compromise |
-| Room dimensions | ARKit plane anchors primary; LiDAR mesh bounding box secondary | Plane anchors stable; mesh drifts during scan |
+| Room dimensions | Wall plane extents for horizontal dimensions; ceiling plane height, then mesh max Y, then 2.7m default for height | Mesh fallback applies only to ceiling height |
 | Oscillator architecture | One `AVAudioSourceNode` per mode, mixed via `AVAudioMixerNode` | Clean graph; direct per-mode amplitude control |
 | Max oscillators | 16 active simultaneously | A15/A16/A17 ceiling; above 20 risks scheduling artifacts |
 | Positional audio | Manual amplitude from player-wall distance | `AVAudioEnvironmentNode` HRTF fights drone synthesis |
 | Ambient timbre | Sine through `AVAudioUnitTimePitch` (rate=0.85, overlap=8) | Granular texture without custom DSP |
-| Large rooms (>8.5m dim) | Auto octave-shift until all fundamentals ≥ 40Hz | Transparent to user; labeled "architectural transposition" in UI |
+| Large rooms (>8.5m dim) | Auto octave-shift until all fundamentals ≥ 40Hz | Labeled "Octave Shift" / "Active" in Settings |
 | Recording | `installTap` on mixer → `AVAudioFile` → share sheet | Standard pattern; no extra permissions needed |
 | Overlay renderer | ARKit direct + SceneKit | Lighter than RealityKit for this use case |
 
@@ -54,7 +54,7 @@ Room Tone is a LiDAR-required iOS app (iPhone Pro / iPad Pro) that maps physical
 
 ## Current State
 
-**All phases complete — pending device testing on LiDAR hardware**
+**Implementation present — device testing on LiDAR hardware, TestFlight, and App Store submission pending**
 See HANDOFF.md for current status and next steps (device test → TestFlight → App Store submission).
 
 ## Stack
@@ -69,7 +69,7 @@ See HANDOFF.md for current status and next steps (device test → TestFlight →
 
 ## How To Run
 
-Build and run on a LiDAR-equipped device. Tap **Scan** and move your phone around the room perimeter, then tap **Synthesize** to hear your room's resonant modes.
+Build and run on a LiDAR-equipped device. Tap **Start Scanning** and move your phone around the room perimeter. Audio starts automatically once preliminary dimensions are available; scan confirmation opens the main experience.
 
 ## Known Risks
 
