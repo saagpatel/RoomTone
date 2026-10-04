@@ -28,3 +28,6 @@ Package.resolved
 # Claude Code
 .claude/
 CLAUDE.md.bak
+
+# distribution-kit lane receipts
+dist-receipts/
