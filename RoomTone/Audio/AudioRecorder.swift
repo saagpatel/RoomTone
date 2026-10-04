@@ -10,7 +10,7 @@ final class AudioRecorder {
     private let engine: AVAudioEngine
     private var audioFile: AVAudioFile?
     private var startTime: Date?
-    private let logger = Logger(subsystem: "com.roomtone.app", category: "AudioRecorder")
+    private let logger = Logger(subsystem: "com.romtone.app", category: "AudioRecorder")
 
     var isRecording: Bool = false
     var duration: TimeInterval {

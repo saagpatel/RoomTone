@@ -4,9 +4,9 @@
 
 | Field | Value |
 |---|---|
-| Name | Room Tone |
+| Name | Room Tone: Resonance Synth |
 | Subtitle | Hear Your Room's Resonance |
-| Bundle ID | com.roomtone.app |
+| Bundle ID | com.romtone.app |
 | SKU | ROOMTONE-001 |
 | Primary Category | Music |
 | Secondary Category | Utilities |

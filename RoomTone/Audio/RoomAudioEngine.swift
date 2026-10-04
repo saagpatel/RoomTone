@@ -10,7 +10,7 @@ final class RoomAudioEngine {
     private(set) var recorder: AudioRecorder?
     private var fadeTimer: Timer?
 
-    private let logger = Logger(subsystem: "com.roomtone.app", category: "AudioEngine")
+    private let logger = Logger(subsystem: "com.romtone.app", category: "AudioEngine")
 
     var isRunning: Bool { engine.isRunning }
 

@@ -101,7 +101,7 @@ struct RoomGeometryProcessor {
     private var readingBuffer: [RoomDimensions] = []
     private var lastProcessedTime: TimeInterval = 0
 
-    private let logger = Logger(subsystem: "com.roomtone.app", category: "GeometryProcessor")
+    private let logger = Logger(subsystem: "com.romtone.app", category: "GeometryProcessor")
 
     // MARK: - Public
 

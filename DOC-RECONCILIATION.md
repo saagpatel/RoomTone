@@ -125,11 +125,11 @@ The architecture file-structure diagram lists files that do not exist and omits 
 
 **Fix:** Update the file-structure diagram in `IMPLEMENTATION-ROADMAP.md` to match the actual directory contents (a human edit, since the file is not in the doc-only editable set).
 
-### project.yml — Bundle ID typo resolved in July 2026 hardening pass
+### project.yml — App Store Connect identity reconciled on 2026-10-04
 
-The prior `com.romtone.app` typo has been corrected. The project generator, test target, generated Xcode project, export configuration, Fastlane Appfile, and release documentation now consistently use `com.roomtone.app` (with `.tests` for the test bundle).
+The authoritative App Store Connect record uses `com.romtone.app`. The July hardening pass incorrectly treated that registered spelling as a typo. The project generator, test target, generated Xcode project, Fastlane Appfile, loggers, and release documentation now use `com.romtone.app` (with `.tests` for the test bundle).
 
-**Remaining owner check:** Confirm the App Store Connect record uses `com.roomtone.app` before creating the provisioning profile. No Apple-account mutation was performed in this repository pass.
+No Apple-account mutation was performed. See `APP-STORE-READINESS.md` for the current upload checks and operator actions.
 
 ---
 

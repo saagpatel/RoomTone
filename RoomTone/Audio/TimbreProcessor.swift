@@ -12,7 +12,7 @@ final class TimbreProcessor {
 
     private weak var oscillatorBank: OscillatorBank?
     private weak var mixer: AVAudioMixerNode?
-    private let logger = Logger(subsystem: "com.roomtone.app", category: "TimbreProcessor")
+    private let logger = Logger(subsystem: "com.romtone.app", category: "TimbreProcessor")
 
     private var isCrossfading = false
 

@@ -9,7 +9,7 @@ import os
 final class OscillatorBank {
     static let oscillatorCount = 16
 
-    private let logger = Logger(subsystem: "com.roomtone.app", category: "OscillatorBank")
+    private let logger = Logger(subsystem: "com.romtone.app", category: "OscillatorBank")
 
     // MARK: - Audio nodes
 

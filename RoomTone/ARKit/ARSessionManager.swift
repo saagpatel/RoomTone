@@ -30,7 +30,7 @@ final class ARSessionManager: NSObject {
     private var timeoutTimer: Timer?
     private var warningTimer: Timer?
     private var isConfirmed = false
-    private let logger = Logger(subsystem: "com.roomtone.app", category: "ARSessionManager")
+    private let logger = Logger(subsystem: "com.romtone.app", category: "ARSessionManager")
     private let wireframeManager = WireframeOverlayManager()
 
     // MARK: - Init
