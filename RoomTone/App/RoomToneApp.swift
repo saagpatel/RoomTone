@@ -92,7 +92,7 @@ private enum AppStoreScreenshot: Int {
 private struct AppStoreScreenshotView: View {
     let shot: AppStoreScreenshot
     @State private var roomModel: RoomModel
-    @State private var showSettings = true
+    @State private var showSettings = false
     private let settingsDefaults: UserDefaults
 
     init(shot: AppStoreScreenshot) {
@@ -114,6 +114,7 @@ private struct AppStoreScreenshotView: View {
                 // fabricated camera image or mock product controls.
                 Color.black
                     .ignoresSafeArea()
+                    .onAppear { showSettings = true }
                     .sheet(isPresented: $showSettings) {
                         SettingsView(roomModel: roomModel)
                             .defaultAppStorage(settingsDefaults)
