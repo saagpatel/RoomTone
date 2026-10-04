@@ -31,3 +31,7 @@ CLAUDE.md.bak
 
 # distribution-kit lane receipts
 dist-receipts/
+
+# Generated App Store screenshot captures and build products
+screenshots/appstore/
+.build/shots/
