@@ -91,27 +91,31 @@ Confirm that these URLs resolve before submission.
 
 ## Screenshots Plan
 
-Capture the current Release UI on supported LiDAR hardware. The plan uses portrait images. Frequency values and detected wireframes depend on the scan; use what the app displays. Wave curves are screen-space graphics. They are not projected onto walls and do not change shape with the timbre selection.
+The plan uses portrait images and global launch-argument numbers `n = 1...8`. Capture OPERATOR rows using the current Release UI on supported LiDAR hardware. Frequency values and detected wireframes depend on the scan; use what the app displays. Wave curves are screen-space graphics. They are not projected onto walls and do not change shape with the timbre selection.
+
+Run `scripts/capture-screenshots.sh` to build Debug once and capture every simulator-capturable row. It requires available simulators named `iPhone 18 Pro Max` and `iPad Pro 13-inch (M5)`, sets dark appearance and a 9:41 status bar, and checks exact pixel sizes. Output is `screenshots/appstore/<device-slug>/<nn>.png`, where `nn` is the global `n`, padded to two digits. `DERIVED` overrides `.build/shots`; `SHOT_WAIT` overrides the default 4-second settling delay and `SHOT_WAIT_8` overrides it for Settings. The script clears status bar overrides and shuts down only devices it booted.
+
+The simulator has no LiDAR. The existing Debug "Try Anyway" action follows a live scan failure and still uses the AR camera view; it is not a camera-free synthetic-room renderer. Therefore rows 1–7 are skipped with `OPERATOR: capture on device`; no camera imagery is fabricated. For `-AppStoreScreenshot 8`, Debug skips onboarding and camera permissions, presents the real Settings sheet over a plain black background, and uses the existing 4.0 × 3.0 × 2.5 m test room. Technical Overlay is reset to off in separate screenshot preferences. No scan, synthesis, time-dependent animation, or random data drives this sheet. These launch arguments have no effect in Release. Simulator success does not complete the OPERATOR captures or establish store acceptance.
 
 ### iPhone 6.9-inch (1320x2868 px), four planned captures
 
-| # | Screen | What to capture |
-|---|---|---|
-| 1 | Scan in progress | Camera view, "Pan your device around the room", Floor, Wall, Perpendicular wall, and progress bar. Detected wall planes can show wireframe outlines. |
-| 2 | Main experience, Drone | Estimated dimensions at the top, displayed dominant frequency, abstract wave curves, and Timbre picker with Drone selected. |
-| 3 | Main experience, Ambient | Ambient selected in the same Timbre picker. Use the current wave curves without inventing a different visualization. |
-| 4 | Main experience, Technical Overlay | Tap the gear icon, enable Technical Overlay, then tap Done. Capture the dimensions, position, mode-frequency list, and Record control in the main view. |
+| n | Device size | Screen | Capture route | What to capture |
+|---|---|---|---|---|
+| 1 | iPhone 6.9-inch, 1320x2868 | Scan in progress | OPERATOR: capture on device | Camera view, "Pan your device around the room", Floor, Wall, Perpendicular wall, and progress bar. Detected wall planes can show wireframe outlines. |
+| 2 | iPhone 6.9-inch, 1320x2868 | Main experience, Drone | OPERATOR: capture on device | Estimated dimensions at the top, displayed dominant frequency, abstract wave curves, and Timbre picker with Drone selected. |
+| 3 | iPhone 6.9-inch, 1320x2868 | Main experience, Ambient | OPERATOR: capture on device | Ambient selected in the same Timbre picker. Use the current wave curves without inventing a different visualization. |
+| 4 | iPhone 6.9-inch, 1320x2868 | Main experience, Technical Overlay | OPERATOR: capture on device | Tap the gear icon, enable Technical Overlay, then tap Done. Capture the dimensions, position, mode-frequency list, and Record control in the main view. |
 
 ### iPad 13-inch (2064x2752 px), four planned captures
 
 The target includes iPad (`TARGETED_DEVICE_FAMILY = 1,2`), so include this set.
 
-| # | Screen | What to capture |
-|---|---|---|
-| 1 | Scan in progress | Portrait camera view with Floor, Wall, Perpendicular wall, instruction, and progress bar. |
-| 2 | Main experience, Drone | Portrait main view with dimensions, frequency display, screen-space wave curves, and Drone selected. |
-| 3 | Main experience, Technical Overlay | Enable Technical Overlay in Settings, tap Done, and capture the mode-frequency list and tracked position in the main view. |
-| 4 | Settings | Open the gear icon and capture Display, Technical Overlay, Room statistics, Privacy Policy, Support, and Done. Octave Shift appears only when applicable. |
+| n | Device size | Screen | Capture route | What to capture |
+|---|---|---|---|---|
+| 5 | iPad 13-inch, 2064x2752 | Scan in progress | OPERATOR: capture on device | Portrait camera view with Floor, Wall, Perpendicular wall, instruction, and progress bar. |
+| 6 | iPad 13-inch, 2064x2752 | Main experience, Drone | OPERATOR: capture on device | Portrait main view with dimensions, frequency display, screen-space wave curves, and Drone selected. |
+| 7 | iPad 13-inch, 2064x2752 | Main experience, Technical Overlay | OPERATOR: capture on device | Enable Technical Overlay in Settings, tap Done, and capture the mode-frequency list and tracked position in the main view. |
+| 8 | iPad 13-inch, 2064x2752 | Settings | Simulator: `-AppStoreScreenshot 8` | Real Settings sheet over a plain black background: Display, Technical Overlay off, Room statistics for the existing test room (4.0 × 3.0 × 2.5 m), Privacy Policy, Support, and Done. Octave Shift is absent for this room. |
 
 ---
 
