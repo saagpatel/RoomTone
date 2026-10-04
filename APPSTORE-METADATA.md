@@ -1,4 +1,4 @@
-# App Store Metadata — Room Tone
+# App Store Metadata - Room Tone
 
 ## Identity
 
@@ -14,68 +14,64 @@
 | Price | $2.99 |
 | Availability | All territories |
 
+
+Store settings above are proposed submission values, except the Name and Bundle ID supplied by the dispatcher. Confirm the remaining values in App Store Connect before submission.
+
 ---
 
 ## Keywords
 
-*(100 character limit — comma-separated)*
+*(100 character limit, comma-separated)*
 
 ```
 LiDAR,acoustic,resonance,room,synthesis,sound,ARKit,spatial,ambient,drone,audio,scanner
 ```
 
-Character count: 88
+Character count: 87
 
 ---
 
 ## Description
 
-*(4,000 character limit)*
+*(4,000 character limit; use the text inside the block)*
 
-**Every room has a voice. Room Tone lets you hear it.**
+```
+Your room has a sound. Room Tone lets you explore it.
 
-Enclosed spaces have natural resonant frequencies—specific pitches related to their dimensions. A 4-meter room has an axial mode near 42.9 Hz along its length. Your bedroom, your kitchen, or a parking garage can each produce a different modeled soundscape.
+Room Tone turns estimated room dimensions into a synthesized soundscape. It uses LiDAR and ARKit on a supported device to estimate geometry, then calculates resonant frequencies for a rectangular room model. A 4-meter dimension gives a fundamental axial mode near 42.9 Hz.
 
-Room Tone uses a supported device's LiDAR scanner to estimate room geometry, then synthesizes a real-time soundscape from calculated resonant modes. Walk toward a wall and that wall's modeled modes rise in the mix. Stand in a corner and converging modes shape the sound of that estimated space.
+Scan and listen
 
-**How it works**
+Tap Start Scanning and pan around an enclosed room. The app looks for a floor and perpendicular walls. Ceiling height comes from a detected ceiling, mesh height, or a 2.7-meter default. Scans depend on the geometry ARKit can detect and may fail to confirm a room.
 
-Point your device around the room. Room Tone detects available floor, wall, ceiling, and mesh geometry through ARKit, estimates room dimensions, computes axial, tangential, and oblique modes, and drives up to 16 oscillators from those calculations.
+Up to 16 oscillators play frequencies calculated from the estimated dimensions. Your tracked position feeds a simplified amplitude model based on the scan origin and room dimensions.
 
-Move through the space and the sound changes. The synthesizer tracks your position continuously — amplitude rises as you approach the wall whose frequency is playing, falls as you move away. The room becomes a spatial instrument.
+Two timbres
 
-**Two timbres**
+Choose Drone for sine tones with a second harmonic and slow modulation. Choose Ambient for sine tones processed with time stretching. Reverb is adjusted using an estimate from the room dimensions.
 
-Switch between Drone and Ambient at any time:
+See the model
 
-- **Drone** — pure sine oscillators with a subtle second harmonic and a slow 0.1 Hz pitch drift that gives the sound organic warmth
-- **Ambient** — the same oscillators processed through a granular time-stretch algorithm, creating a textural, cloud-like soundscape from the same room geometry
+The camera view includes abstract wave curves drawn on the screen. Open Settings to enable Technical Overlay and see calculated mode frequencies, estimated dimensions, and tracked position.
 
-**Record and share**
+Requirements and privacy
 
-Tap the record button to capture a WAV recording of your room's voice. Share it directly from the app — to Voice Memos, Files, AirDrop, or any other destination. Every room produces a unique recording.
+Room Tone requires iOS 17 or later and an iPhone or iPad that supports LiDAR mesh reconstruction. Unsupported devices show LiDAR Required.
 
-**Requirements**
-
-Room Tone requires a supported iPhone Pro or iPad Pro with LiDAR mesh reconstruction. The app displays a clear explanation screen on unsupported devices.
-
-Room Tone works best in enclosed spaces with a ceiling. Open-plan spaces and outdoor environments will produce a prompt to try an enclosed room, with the option to continue with estimated dimensions.
-
-**No microphone. No recording of your environment.**
-
-Room Tone synthesizes audio entirely from geometry — it does not listen to your room. The camera is used only for LiDAR spatial mapping; no images are stored or transmitted. There is no backend, no user account, no analytics, and no network connection of any kind.
+Geometry processing and audio synthesis run on your device. No microphone is used. The app does not save photos or video. There is no account, analytics, or tracking. Support and Privacy Policy open web pages. Sharing a file uses a destination you choose in the system share sheet.
+```
 
 ---
 
 ## Promotional Text
 
-*(170 character limit — can be updated without a new app review)*
+*(170 character limit)*
 
 ```
-Scan any room. Hear its resonant frequencies synthesized in real time. A generative instrument that lives in your walls.
+Turn estimated room dimensions into sound with LiDAR. Explore calculated resonant modes and choose Drone or Ambient on a supported iPhone or iPad.
 ```
 
-Character count: 120
+Character count: 146
 
 ---
 
@@ -87,92 +83,107 @@ Character count: 120
 | Marketing URL | https://github.com/saagpatel/RoomTone |
 | Privacy Policy URL | https://github.com/saagpatel/RoomTone/blob/main/PRIVACY.md |
 
-*Replace with actual URLs before submission.*
+Confirm that these URLs resolve before submission.
 
 ---
 
 ## Screenshots Plan
 
-### iPhone 6.9" (iPhone 16 Pro Max — 1320×2868 px) — 4 required
+Capture the current Release UI on supported LiDAR hardware. The plan uses portrait images. Frequency values and detected wireframes depend on the scan; use what the app displays. Wave curves are screen-space graphics. They are not projected onto walls and do not change shape with the timbre selection.
 
-| # | Screen | Description | Key elements to show |
-|---|---|---|---|
-| 1 | Scan phase in progress | ScanView during active scan showing scan progress indicators and AR mesh preview | Progress checklist (floor ✓, wall 1 ✓, wall 2 pending), AR wireframe mesh visible on walls, "pan your device around the room" instruction |
-| 2 | Main experience — Drone timbre | MainExperienceView active with audio playing in a living room | Translucent wireframe overlay on walls, standing wave animation visible on the nearest wall, player position indicator at screen center with dominant frequency readout (e.g. "42 Hz"), Drone/Ambient toggle in corner |
-| 3 | Ambient timbre — textural visualization | Same room, Ambient timbre selected | Standing wave animation subtly different (more diffuse), Ambient button highlighted, same wireframe overlay — shows the two distinct visual states |
-| 4 | Technical overlay + record button active | SettingsView technical overlay enabled, recording in progress | Room dimensions (Lx / Ly / Lz) displayed, all active mode frequencies listed in Hz, record button showing elapsed time, room stats visible |
+### iPhone 6.9-inch (1320x2868 px), four planned captures
 
-### iPad 13" (iPad Pro M4 — 2064×2752 px) — 4 required
-
-| # | Screen | Description |
+| # | Screen | What to capture |
 |---|---|---|
-| 1 | Scan phase on iPad | Wider AR scan view showing more room coverage, progress indicators in larger format |
-| 2 | Main experience in landscape | Full landscape AR experience view showing wall wireframes across a wide angle |
-| 3 | Standing wave animation close-up | Close crop of wall wireframe with standing wave animation clearly visible, dominant frequency prominent |
-| 4 | Share sheet open | WAV export share sheet presented over the main experience view, showing share destination options |
+| 1 | Scan in progress | Camera view, "Pan your device around the room", Floor, Wall, Perpendicular wall, and progress bar. Detected wall planes can show wireframe outlines. |
+| 2 | Main experience, Drone | Estimated dimensions at the top, displayed dominant frequency, abstract wave curves, and Timbre picker with Drone selected. |
+| 3 | Main experience, Ambient | Ambient selected in the same Timbre picker. Use the current wave curves without inventing a different visualization. |
+| 4 | Main experience, Technical Overlay | Tap the gear icon, enable Technical Overlay, then tap Done. Capture the dimensions, position, mode-frequency list, and Record control in the main view. |
+
+### iPad 13-inch (2064x2752 px), four planned captures
+
+The target includes iPad (`TARGETED_DEVICE_FAMILY = 1,2`), so include this set.
+
+| # | Screen | What to capture |
+|---|---|---|
+| 1 | Scan in progress | Portrait camera view with Floor, Wall, Perpendicular wall, instruction, and progress bar. |
+| 2 | Main experience, Drone | Portrait main view with dimensions, frequency display, screen-space wave curves, and Drone selected. |
+| 3 | Main experience, Technical Overlay | Enable Technical Overlay in Settings, tap Done, and capture the mode-frequency list and tracked position in the main view. |
+| 4 | Settings | Open the gear icon and capture Display, Technical Overlay, Room statistics, Privacy Policy, Support, and Done. Octave Shift appears only when applicable. |
 
 ---
 
 ## App Review Notes
 
-**Device requirement:** Room Tone's core experience requires LiDAR mesh reconstruction. On unsupported hardware, the app shows `UnsupportedDeviceView` rather than attempting a scan. Confirm the current compatible-device list and App Store availability settings before submission; the binary performs a runtime capability check and does not claim a LiDAR-specific App Store filter.
+**Device requirement:** The core scan requires LiDAR mesh reconstruction and iOS 17 or later. On a fresh launch, swipe through the three onboarding pages and tap "Get Started" on the last page. A simulator or unsupported device then shows "LiDAR Required". It cannot demonstrate the scan or soundscape. Use a compatible physical iPhone or iPad for the steps below. The build checks support at runtime; its declared device capability is `arkit`, not a LiDAR-specific store filter.
 
-**Camera permission:** The app requests camera access for ARKit LiDAR scanning only. The exact permission string is: *"Room Tone uses the camera to map room geometry for acoustic synthesis — no images are stored or transmitted."* No `AVCaptureSession` is used; no photos or video are captured or stored.
+**Camera permission:** Tap "Start Scanning", then grant camera permission if prompted. Camera access is used for ARKit geometry mapping. The app does not save photos or video and requests no microphone access. If permission is denied, the screen shows "Camera Access Required" with "Open Settings" and "Retry". Enable camera access in system Settings, return to Room Tone, tap "Retry", then "Start Scanning".
 
-**How to test the core flow:**
+**Core flow on supported hardware:**
 
-1. Launch the app on a supported LiDAR device (iPhone Pro or iPad Pro)
-2. Grant camera permission when prompted
-3. On the Scan view, slowly pan the device to cover the floor, then both walls, then ceiling
-4. Scan typically completes in 10–20 seconds in a normally sized room
-5. Audio will fade in automatically as scan progress reaches 100%
-6. Walk toward any wall — the audio will change as proximity to that wall increases
-7. Tap the Drone/Ambient toggle to switch timbres (no audio gap)
-8. Tap Record, wait 10 seconds, tap Stop, then use the share sheet to export
+1. After onboarding, tap "Start Scanning" and allow camera access.
+2. Slowly pan across the floor and perpendicular walls of an enclosed room. The scan shows "Pan your device around the room", "Floor", "Wall", and "Perpendicular wall" with a progress bar. Ceiling height can be estimated without detecting a ceiling.
+3. When dimensions stabilize, the main view opens with estimated dimensions and a frequency display. Audio can start while preliminary dimensions are available. Scan duration and audible output depend on the device and detected geometry; there is no promised completion time or fade tied to the progress bar.
+4. Move the device to exercise position tracking. Position feeds an axis-aligned amplitude approximation based on the scan origin. It does not map detected physical walls or corners to the sound, and movement may not produce a noticeable change at a given location.
+5. In "Timbre", select "Ambient" or "Drone". Switching briefly mutes the mixer. The wave visualization does not have separate timbre styles.
+6. Tap the gear icon to open "Settings". Enable "Technical Overlay" and tap "Done" to see dimensions, position, and mode frequencies in the main view.
+7. To inspect the file controls, tap "Record", then "Stop Recording". If a file is returned, "Share Recording" appears; tap it for the system share sheet. Available destinations depend on the device. The file uses a WAV extension, but audible capture of the live synthesis has not been verified: the recorder taps the main mixer while synthesis is routed directly to output. Do not treat file creation as proof of captured sound. If recording cannot start, the app shows "Recording Unavailable".
 
-**Background audio:** The app uses the `audio` background mode so users can lock their device while walking through a space. Audio continues playing when the device is locked. This is declared in `Info.plist` and justified under App Store guideline §2.5.4 (continuous audio experience).
+**If scanning fails:** The current location may not provide enough geometry. "No Enclosed Space" can appear when detection progress is insufficient after 20 seconds. "Scan Timed Out" can appear after 30 seconds without confirmation. These are not tests for ceiling absence or for being outdoors. Tap "Retry", then "Start Scanning" to try a room with detectable geometry. The Release build has no "Try Anyway" action or fixed-room bypass. The simulator cannot supply this hardware flow.
 
-**No network connections.** Room Tone makes zero outbound network requests. It contains no analytics SDK, no crash reporter, and no advertising SDK.
+**Background audio:** The build declares the `audio` background mode. Locked-device playback still requires a hardware check; continued position tracking while locked is not promised.
 
-**Outdoor / open space behavior:** If the scanner does not detect a ceiling within 20 seconds, the app presents a "Room Tone works best in enclosed spaces" message with a "Try Anyway" button. Tapping "Try Anyway" uses estimated dimensions and continues. This is not a crash or error state.
+**Privacy and links:** Geometry processing and synthesis stay on-device. The app has no backend, account, analytics, or tracking service. "Support" and "Privacy Policy" in Settings open web pages, and user-selected sharing destinations may use a network.
 
 ---
 
 ## Submission Checklist
 
 ### Metadata
-- [ ] App name: "Room Tone" — confirm no trademark conflict
-- [ ] Subtitle within 30 characters
-- [ ] Keywords within 100 characters
-- [ ] Description does not claim microphone access or environmental recording (the app does not use a microphone — description is accurate)
+- [ ] App name: "Room Tone: Resonance Synth"; confirm trademark availability
+- [ ] Name and subtitle within 30 characters each
+- [ ] Keywords within 100 characters; actual count recorded below
+- [ ] Description within 4,000 characters; claims limited to modeled synthesis and current UI
 - [ ] Promotional text within 170 characters
-- [ ] Support URL live and resolves
-- [ ] Privacy Policy URL live — states: no data collected, camera used for geometry mapping only, no images stored
+- [ ] Support and Privacy Policy URLs resolve; policy covers on-device processing and user-directed links and sharing
+- [ ] Review notes use current labels and disclose simulator, location, and recording limitations
 
 ### Screenshots
-- [ ] iPhone 6.9" — 4 screenshots at 1320×2868 px, captured on physical LiDAR device
-- [ ] iPhone 6.1" — 4 screenshots (or promote 6.9" screenshots — accepted)
-- [ ] iPad 13" — 4 screenshots at 2064×2752 px
-- [ ] No screenshots contain identifiable room contents, faces, or personal items
-- [ ] Standing wave animation visible in at least one screenshot (captures an in-progress frame, not a static moment)
+- [ ] iPhone 6.9-inch captures at 1320x2868 px on supported LiDAR hardware
+- [ ] iPad 13-inch captures at 2064x2752 px on supported LiDAR hardware
+- [ ] Use current UI values and screen-space wave curves; review screenshot content before upload
+- [ ] No identifiable room contents, faces, or personal items
 
-### Build
-- [ ] `xcodebuild archive` succeeds on Release scheme, zero warnings under Swift 5.10
-- [ ] Privacy manifest (`PrivacyInfo.xcprivacy`) declares no tracking or collected data and the UserDefaults required-reason API
-- [ ] `Info.plist` declares the supported `arkit` capability; runtime unsupported-device path verified on non-LiDAR hardware
-- [ ] `Info.plist` contains `NSCameraUsageDescription` with exact approved text
-- [ ] `Info.plist` contains `UIBackgroundModes` → `audio`
-- [ ] App icon present in all required sizes
-- [ ] Version 1.0, build number set
+### Build and device verification
+- [ ] Release archive and tests pass outside this copy pass
+- [ ] Privacy manifest declares no tracking or collected data and the required-reason APIs used by the target
+- [ ] Runtime "LiDAR Required" path verified on unsupported hardware
+- [ ] Camera grant and denial paths verified on supported hardware
+- [ ] Release has no "Try Anyway" fixed-dimension bypass
+- [ ] Audible synthesis, timbre switching, and position tracking checked on LiDAR hardware
+- [ ] Recording file played back to verify non-silent capture of the live synthesis before describing it as audio capture in store copy
+- [ ] Available share destinations and locked-device audio checked on hardware
+- [ ] App icon, version 1.0, and build 2 verified in the submission archive
 
 ### App Store Connect
-- [ ] Age rating: 4+
-- [ ] Export compliance: standard encryption only (HTTPS) — answer "No" to proprietary encryption
-- [ ] Primary category: Music; Secondary: Utilities
-- [ ] Price: $2.99
-- [ ] Compatible-device availability reviewed in App Store Connect; do not claim LiDAR-only filtering without live confirmation
-- [ ] TestFlight: tested on at least 3 room types (bedroom, kitchen, open-plan/garage as unsupported test), 0 crashes across all testers
-- [ ] App Review Notes field completed with LiDAR device requirement and test instructions
+- [ ] Confirm age rating, SKU, categories, price, territories, and compatible-device availability against proposed Identity values
+- [ ] Confirm privacy label against the app and privacy policy
+- [ ] Confirm export compliance against `ITSAppUsesNonExemptEncryption = false`; no custom cryptography is implemented
+- [ ] Confirm screenshot slots and dimensions; planned captures are not evidence of store acceptance
+- [ ] Complete TestFlight device checks, including enclosed-room scans and failed scans
+- [ ] Enter review notes with the LiDAR requirement and current test path
+
+## Field Counts
+
+Python character counts of the exact field values, including spaces and description newlines. Description excludes the surrounding code fence.
+
+| Field | Characters | Limit |
+|---|---|---|
+| Name | 26 | 30 |
+| Subtitle | 26 | 30 |
+| Promotional text | 146 | 170 |
+| Keywords | 87 | 100 |
+| Description | 1659 | 4000 |
 
 ## Copyright
 © 2026 saagpatel
