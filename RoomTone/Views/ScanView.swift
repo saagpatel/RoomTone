@@ -127,6 +127,7 @@ struct ScanView: View {
             .tint(.white)
             .foregroundStyle(.black)
 
+            #if DEBUG
             if reason == .noEnclosure {
                 Button("Try Anyway") {
                     // Force confirmation with default dimensions
@@ -140,6 +141,7 @@ struct ScanView: View {
                 }
                 .buttonStyle(.bordered)
             }
+            #endif
 
             if reason == .cameraDenied {
                 Button("Open Settings") {

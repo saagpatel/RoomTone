@@ -37,7 +37,7 @@ Specifically verified on `origin/main`:
 - App Store identity:
   - Name: **Room Tone**
   - Subtitle: **Hear Your Room's Resonance**
-  - Bundle ID: `com.roomtone.app`, SKU: `ROOMTONE-001`
+  - Bundle ID: `com.romtone.app`, SKU: `ROOMTONE-001`
   - Categories: **Music** + **Utilities**
   - Age Rating: 4+, **Price: $2.99**, All territories
 - Default branch: `main`
@@ -152,7 +152,7 @@ faster).
 | `origin/main` tip | `4021d95` chore: add fastlane deliver config for App Store metadata upload |
 | Default branch | `main` |
 | Build system | iOS / iPadOS / Swift / SwiftUI / **ARKit / LiDAR** / XcodeGen / XCTest |
-| Bundle ID | `com.roomtone.app` |
+| Bundle ID | `com.romtone.app` |
 | App Store category | Music + Utilities |
 | Price | **$2.99** (third paid iOS cluster member) |
 | Device requirement | **LiDAR-equipped (iPad Pro 2020+, iPhone 12 Pro+)** |

@@ -35,6 +35,10 @@ Build and run on a LiDAR-equipped device. Tap **Start Scanning** and move your p
 
 ## Verification
 
+App Store Connect bundle ID: `com.romtone.app`; the test bundle is
+`com.romtone.app.tests`. The next upload uses build `2`; the app version remains
+`1.0`. See `APP-STORE-READINESS.md` for upload prerequisites and outstanding checks.
+
 Run from the repository root. Use full Xcode with active Xcode developer tools and an installed iOS simulator;
 Command Line Tools alone cannot run these checks. `make test` generates the project
 with XcodeGen before running tests.

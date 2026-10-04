@@ -1,1 +1,1 @@
-LiDAR,acoustic,resonance,room,synthesis,sound,ARKit,spatial,ambient,drone,audio,scanner
+LiDAR,acoustic,resonance,room,synthesizer,drone,ambient,generative,standing wave,modes,spatial,tone

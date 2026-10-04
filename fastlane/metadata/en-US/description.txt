@@ -1,32 +1,25 @@
-Every room has a voice. Room Tone lets you hear it.
+Your room has a sound. Room Tone lets you explore it.
 
-Enclosed spaces have natural resonant frequencies—specific pitches related to their dimensions. A 4-meter room has an axial mode near 42.9 Hz along its length. Your bedroom, your kitchen, or a parking garage can each produce a different modeled soundscape.
+Every enclosed room has resonant frequencies set by its dimensions: walls 4 meters apart give a lowest axial mode near 42.9 Hz. Room Tone scans your room with LiDAR, estimates its length, width, and height, works out the axial, tangential, and oblique modes of a box that size, and plays them back as a soundscape.
 
-Room Tone uses a supported device's LiDAR scanner to estimate room geometry, then synthesizes a real-time soundscape from calculated resonant modes. Walk toward a wall and that wall's modeled modes rise in the mix. Stand in a corner and converging modes shape the sound of that estimated space.
+The sound uses a simple box model based on the scan, rather than the room's exact walls.
 
-How it works
+Scan and listen
 
-Point your device around the room. Room Tone detects available floor, wall, ceiling, and mesh geometry through ARKit, estimates room dimensions, computes axial, tangential, and oblique modes, and drives up to 16 oscillators from those calculations.
+Tap Start Scanning and pan around an enclosed room. The app looks for a floor and perpendicular walls. Ceiling height comes from a detected ceiling, the highest scanned surface, or a 2.7-meter default. If the scan cannot find enough geometry, tap Retry somewhere with clearer walls.
 
-Move through the space and the sound changes. The synthesizer tracks your position continuously — amplitude rises as you approach the wall whose frequency is playing, falls as you move away. The room becomes a spatial instrument.
+Up to 16 oscillators play the modes. As you move, your tracked position changes how loudly some tones play. If any room dimension exceeds 8.5 meters, modes below 40 Hz shift up by one or more octaves; Settings shows Octave Shift for these rooms.
 
 Two timbres
 
-Switch between Drone and Ambient at any time:
+Drone uses sine tones with a soft second harmonic and a slow drift. Ambient runs the same tones through a time stretch for a smeared, softer texture. Reverb scales with the room size.
 
-- Drone — pure sine oscillators with a subtle second harmonic and a slow 0.1 Hz pitch drift that gives the sound organic warmth
-- Ambient — the same oscillators processed through a granular time-stretch algorithm, creating a textural, cloud-like soundscape from the same room geometry
+See the model
 
-Record and share
+The camera view shows the estimated dimensions, the dominant frequency, and abstract wave curves. Turn on Technical Overlay in Settings for the full list of mode frequencies and your tracked position.
 
-Tap the record button to capture a WAV recording of your room's voice. Share it directly from the app — to Voice Memos, Files, AirDrop, or any other destination. Every room produces a unique recording.
+Requirements and privacy
 
-Requirements
+Room Tone needs iOS 17 or later and an iPhone or iPad with a LiDAR scanner; other devices see a LiDAR Required screen.
 
-Room Tone requires a supported iPhone Pro or iPad Pro with LiDAR mesh reconstruction. The app displays a clear explanation screen on unsupported devices.
-
-Room Tone works best in enclosed spaces with a ceiling. Open-plan spaces and outdoor environments will produce a prompt to try an enclosed room, with the option to continue with estimated dimensions.
-
-No microphone. No recording of your environment.
-
-Room Tone synthesizes audio entirely from geometry — it does not listen to your room. The camera is used only for LiDAR spatial mapping; no images are stored or transmitted. There is no backend, no user account, no analytics, and no network connection of any kind.
+Geometry processing and audio synthesis run on your device; the Support and Privacy Policy links open web pages. The microphone is never used, no photos or video are saved, and there is no account, analytics, or tracking.

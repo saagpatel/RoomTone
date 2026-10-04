@@ -1,6 +1,6 @@
 name: RoomTone
 options:
-  bundleIdPrefix: com.roomtone
+  bundleIdPrefix: com.romtone
   deploymentTarget:
     iOS: "17.0"
   xcodeVersion: "16.0"
@@ -9,6 +9,7 @@ options:
 settings:
   base:
     SWIFT_VERSION: "5.10"
+    CURRENT_PROJECT_VERSION: 2
     TARGETED_DEVICE_FAMILY: "1,2"
     INFOPLIST_KEY_UILaunchScreen_Generation: YES
     INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown"
@@ -25,7 +26,9 @@ targets:
       path: RoomTone/Resources/Info.plist
       properties:
         UILaunchScreen: {}
-        NSCameraUsageDescription: "Room Tone uses the camera to map room geometry for acoustic synthesis — no images are stored or transmitted."
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        ITSAppUsesNonExemptEncryption: NO
+        NSCameraUsageDescription: "Room Tone uses the camera to map room geometry for acoustic synthesis. No images are stored or transmitted."
         UIRequiredDeviceCapabilities:
           - arkit
         UIBackgroundModes:
@@ -37,7 +40,7 @@ targets:
           - UIInterfaceOrientationPortraitUpsideDown
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.roomtone.app
+        PRODUCT_BUNDLE_IDENTIFIER: com.romtone.app
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: 3TGZFKFNA4
     dependencies: []
@@ -54,4 +57,15 @@ targets:
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
-        PRODUCT_BUNDLE_IDENTIFIER: com.roomtone.app.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.romtone.app.tests
+
+schemes:
+  RoomTone:
+    build:
+      targets:
+        RoomTone: all
+    test:
+      targets:
+        - RoomToneTests
+    archive:
+      config: Release
