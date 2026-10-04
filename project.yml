@@ -28,7 +28,7 @@ targets:
         UILaunchScreen: {}
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         ITSAppUsesNonExemptEncryption: NO
-        NSCameraUsageDescription: "Room Tone uses the camera to map room geometry for acoustic synthesis — no images are stored or transmitted."
+        NSCameraUsageDescription: "Room Tone uses the camera to map room geometry for acoustic synthesis. No images are stored or transmitted."
         UIRequiredDeviceCapabilities:
           - arkit
         UIBackgroundModes:
