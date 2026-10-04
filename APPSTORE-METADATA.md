@@ -24,10 +24,10 @@ Store settings above are proposed submission values, except the Name and Bundle 
 *(100 character limit, comma-separated)*
 
 ```
-LiDAR,acoustic,resonance,room,synthesis,sound,ARKit,spatial,ambient,drone,audio,scanner
+LiDAR,acoustic,resonance,room,synthesizer,drone,ambient,generative,standing wave,modes,spatial,tone
 ```
 
-Character count: 87
+Character count: 99
 
 ---
 
@@ -38,27 +38,29 @@ Character count: 87
 ```
 Your room has a sound. Room Tone lets you explore it.
 
-Room Tone turns estimated room dimensions into a synthesized soundscape. It uses LiDAR and ARKit on a supported device to estimate geometry, then calculates resonant frequencies for a rectangular room model. A 4-meter dimension gives a fundamental axial mode near 42.9 Hz.
+Every enclosed room has resonant frequencies set by its dimensions: walls 4 meters apart give a lowest axial mode near 42.9 Hz. Room Tone scans your room with LiDAR, estimates its length, width, and height, works out the axial, tangential, and oblique modes of a box that size, and plays them back as a soundscape.
+
+The sound uses a simple box model based on the scan, rather than the room's exact walls.
 
 Scan and listen
 
-Tap Start Scanning and pan around an enclosed room. The app looks for a floor and perpendicular walls. Ceiling height comes from a detected ceiling, mesh height, or a 2.7-meter default. Scans depend on the geometry ARKit can detect and may fail to confirm a room.
+Tap Start Scanning and pan around an enclosed room. The app looks for a floor and perpendicular walls. Ceiling height comes from a detected ceiling, the highest scanned surface, or a 2.7-meter default. If the scan cannot find enough geometry, tap Retry somewhere with clearer walls.
 
-Up to 16 oscillators play frequencies calculated from the estimated dimensions. Your tracked position feeds a simplified amplitude model based on the scan origin and room dimensions.
+Up to 16 oscillators play the modes. As you move, your tracked position changes how loudly some tones play. If any room dimension exceeds 8.5 meters, modes below 40 Hz shift up by one or more octaves; Settings shows Octave Shift for these rooms.
 
 Two timbres
 
-Choose Drone for sine tones with a second harmonic and slow modulation. Choose Ambient for sine tones processed with time stretching. Reverb is adjusted using an estimate from the room dimensions.
+Drone uses sine tones with a soft second harmonic and a slow drift. Ambient runs the same tones through a time stretch for a smeared, softer texture. Reverb scales with the room size.
 
 See the model
 
-The camera view includes abstract wave curves drawn on the screen. Open Settings to enable Technical Overlay and see calculated mode frequencies, estimated dimensions, and tracked position.
+The camera view shows the estimated dimensions, the dominant frequency, and abstract wave curves. Turn on Technical Overlay in Settings for the full list of mode frequencies and your tracked position.
 
 Requirements and privacy
 
-Room Tone requires iOS 17 or later and an iPhone or iPad that supports LiDAR mesh reconstruction. Unsupported devices show LiDAR Required.
+Room Tone needs iOS 17 or later and an iPhone or iPad with a LiDAR scanner; other devices see a LiDAR Required screen.
 
-Geometry processing and audio synthesis run on your device. No microphone is used. The app does not save photos or video. There is no account, analytics, or tracking. Support and Privacy Policy open web pages. Sharing a file uses a destination you choose in the system share sheet.
+Geometry processing and audio synthesis run on your device; the Support and Privacy Policy links open web pages. The microphone is never used, no photos or video are saved, and there is no account, analytics, or tracking.
 ```
 
 ---
@@ -68,10 +70,10 @@ Geometry processing and audio synthesis run on your device. No microphone is use
 *(170 character limit)*
 
 ```
-Turn estimated room dimensions into sound with LiDAR. Explore calculated resonant modes and choose Drone or Ambient on a supported iPhone or iPad.
+Scan a room with LiDAR and hear a drone built from its resonant modes. Walk around, switch timbres, and see the frequencies behind the sound. LiDAR iPhone or iPad only.
 ```
 
-Character count: 146
+Character count: 168
 
 ---
 
@@ -123,7 +125,7 @@ The target includes iPad (`TARGETED_DEVICE_FAMILY = 1,2`), so include this set.
 
 1. After onboarding, tap "Start Scanning" and allow camera access.
 2. Slowly pan across the floor and perpendicular walls of an enclosed room. The scan shows "Pan your device around the room", "Floor", "Wall", and "Perpendicular wall" with a progress bar. Ceiling height can be estimated without detecting a ceiling.
-3. When dimensions stabilize, the main view opens with estimated dimensions and a frequency display. Audio can start while preliminary dimensions are available. Scan duration and audible output depend on the device and detected geometry; there is no promised completion time or fade tied to the progress bar.
+3. When dimensions stabilize, the main view opens with estimated dimensions and a frequency display. Audio can start while preliminary dimensions are available. Scan duration and audible output depend on the device and detected geometry; there is no promised completion time. Volume may rise as scan progress increases.
 4. Move the device to exercise position tracking. Position feeds an axis-aligned amplitude approximation based on the scan origin. It does not map detected physical walls or corners to the sound, and movement may not produce a noticeable change at a given location.
 5. In "Timbre", select "Ambient" or "Drone". Switching briefly mutes the mixer. The wave visualization does not have separate timbre styles.
 6. Tap the gear icon to open "Settings". Enable "Technical Overlay" and tap "Done" to see dimensions, position, and mode frequencies in the main view.
@@ -181,9 +183,9 @@ Python character counts of the exact field values, including spaces and descript
 |---|---|---|
 | Name | 26 | 30 |
 | Subtitle | 26 | 30 |
-| Promotional text | 146 | 170 |
-| Keywords | 87 | 100 |
-| Description | 1659 | 4000 |
+| Promotional text | 168 | 170 |
+| Keywords | 99 | 100 |
+| Description | 1791 | 4000 |
 
 ## Copyright
 © 2026 saagpatel

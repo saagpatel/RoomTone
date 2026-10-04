@@ -1,4 +1,4 @@
-# Privacy Policy - Room Tone
+# Room Tone Privacy Policy
 
 Room Tone uses the camera and LiDAR through ARKit to estimate room geometry. It does not use the microphone or save photos or video.
 
