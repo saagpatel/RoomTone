@@ -97,7 +97,7 @@ bundle_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app_path/I
 capture_device() {
     local index=$1
     shift
-    local id="${device_ids[$index]}" shot wait_key wait_seconds output dimensions termination_output
+    local id="${device_ids[$index]}" shot wait_key wait_seconds output dimensions
     printf 'Preparing %s (%s x %s)\n' "${device_names[$index]}" \
         "${widths[$index]}" "${heights[$index]}"
     if [[ "${device_states[$index]}" == Shutdown ]]; then
@@ -111,6 +111,12 @@ capture_device() {
     xcrun simctl install "$id" "$app_path"
     xcrun simctl ui "$id" appearance dark
 
+    # Prime the app-to-app launch history so captures have no cross-app back link.
+    xcrun simctl terminate "$id" "$bundle_id" || true
+    xcrun simctl launch "$id" "$bundle_id" -AppStoreScreenshot 8
+    sleep 2
+    xcrun simctl terminate "$id" "$bundle_id" || true
+
     for shot in "$@"; do
         if [[ "$shot" != 8 ]]; then
             printf '%s shot %02d: OPERATOR: capture on device (LiDAR/camera required)\n' \
@@ -123,14 +129,7 @@ capture_device() {
             fail "$wait_key / SHOT_WAIT must be a nonnegative number of seconds."
         output="screenshots/appstore/${device_slugs[$index]}/$(printf '%02d' "$shot").png"
         mkdir -p "$(dirname "$output")"
-        # Ignore only ESRCH (no running process), never an actual termination
-        # failure that could leave a stale app instance behind.
-        if ! termination_output="$(xcrun simctl terminate "$id" "$bundle_id" 2>&1)"; then
-            if [[ "$termination_output" != *'domain=NSPOSIXErrorDomain, code=3'* || \
-                  "$termination_output" != *'No such process'* ]]; then
-                fail "Could not terminate $bundle_id: $termination_output"
-            fi
-        fi
+        xcrun simctl terminate "$id" "$bundle_id" || true
         xcrun simctl launch "$id" "$bundle_id" -AppStoreScreenshot "$shot"
         sleep "$wait_seconds"
         xcrun simctl io "$id" screenshot "$output"
